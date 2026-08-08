@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B1220" />
+    <meta name="description" content="Jean Marc Aguilar — Aspiring Full Stack Developer and IT Student. Building clean, modern, and thoughtful web experiences." />
+    <meta name="keywords" content="Jean Marc Aguilar, Full Stack Developer, IT Student, React Developer, PHP Developer, Portfolio" />
+    <meta name="author" content="Jean Marc Aguilar" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jean Marc Aguilar — Aspiring Full Stack Developer" />
+    <meta property="og:description" content="Building clean, modern, and thoughtful web experiences." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Jean Marc Aguilar — Full Stack Developer</title>
+    <script>
+      // Runs synchronously before React mounts to avoid a flash of the
+      // wrong theme. Reads saved preference, falls back to OS preference.
+      (function () {
+        try {
+          var saved = localStorage.getItem('jm-theme');
+          var theme =
+            saved === 'light' || saved === 'dark'
+              ? saved
+              : window.matchMedia &&
+                window.matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark';
+          document.documentElement.classList.toggle('dark', theme === 'dark');
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', theme === 'dark' ? '#0B1220' : '#F8FAFC');
+        } catch (_) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

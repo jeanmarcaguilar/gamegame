@@ -1,0 +1,425 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -----------------------------------------------------------
+   Root tokens — light mode is the default.
+   Dark mode values live in `html.dark` and override the
+   defaults when the `dark` class is present on <html>.
+----------------------------------------------------------- */
+:root {
+  /* Surface */
+  --color-bg: #F8FAFC;             /* page background (slate-50) */
+  --color-bg-secondary: #EEF2F7;   /* alt section background (soft slate) */
+  --color-card: #FFFFFF;           /* card / surface (white) */
+  --color-border: rgba(15, 23, 42, 0.08); /* slate-900 @ 8% */
+  --color-border-strong: rgba(15, 23, 42, 0.12);
+
+  /* Brand */
+  --color-primary: #2563EB;        /* blue-600 — slightly punchier on white */
+  --color-accent: #3B82F6;         /* blue-500 */
+  --color-primary-soft: rgba(37, 99, 235, 0.10);
+  --color-primary-fg: #FFFFFF;     /* foreground on bg-primary (white in both
+                                      themes — needed as a variable so the
+                                      universal `*` transition can fade it) */
+
+  /* Status — used by ErrorBoundary indicator + future error states.
+     Variable-backed so a theme flip cross-fades instead of snapping. */
+  --color-status-warn: #F59E0B;    /* amber-500 — soft warning glow on light */
+  --color-status-err:  #F43F5E;    /* rose-500  — readable on light cards */
+
+  /* Text */
+  --color-text: #0F172A;           /* slate-900 */
+  --color-muted: #475569;          /* slate-600 */
+  --color-success: #059669;        /* emerald-600 (AA on white) */
+
+  /* Decorative */
+  --color-grid: rgba(15, 23, 42, 0.05);
+  --color-overlay-soft: rgba(15, 23, 42, 0.03);
+  --color-overlay-medium: rgba(15, 23, 42, 0.06);
+  --color-shadow-card: rgba(15, 23, 42, 0.08);
+  --color-shadow-soft: rgba(15, 23, 42, 0.06);
+  --color-glass: rgba(255, 255, 255, 0.65);
+  --color-glass-soft: rgba(15, 23, 42, 0.03);
+  --color-glow-soft: rgba(37, 99, 235, 0.30);
+  --color-radial-glow: rgba(59, 130, 246, 0.10);
+
+  /* SVG artwork */
+  --color-art-bg-from: #EEF2F7;
+  --color-art-bg-to: #DBE3EE;
+  --color-art-grid: rgba(15, 23, 42, 0.05);
+  --color-art-stroke: rgba(15, 23, 42, 0.08);
+  --color-art-text: #0F172A;
+  --color-art-text-muted: #475569;
+  --color-art-fg: rgba(15, 23, 42, 0.04);
+  --color-art-fg-strong: rgba(15, 23, 42, 0.06);
+
+  /* Scrollbar */
+  --color-scrollbar-track: #F1F5F9;
+  --color-scrollbar-thumb: #CBD5E1;
+  --color-scrollbar-thumb-hover: #94A3B8;
+  --color-scrollbar-border: #F1F5F9;
+
+  /* Type & easing */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Poppins', 'Inter', sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Soft section-tint gradient (used by .section-tint) */
+  --color-tint-from: rgba(96, 165, 250, 0.10);
+  --color-tint-via: rgba(167, 139, 250, 0.06);
+  --color-tint-to: rgba(52, 211, 153, 0.05);
+
+  color-scheme: light;
+}
+
+/* -----------------------------------------------------------
+   Dark mode — additive via `<html class="dark">`.
+----------------------------------------------------------- */
+html.dark {
+  --color-bg: #0B1220;
+  --color-bg-secondary: #0F172A;
+  --color-card: #111827;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  --color-primary: #3B82F6;
+  --color-accent: #60A5FA;
+  --color-primary-soft: rgba(59, 130, 246, 0.12);
+  --color-primary-fg: #FFFFFF;
+
+  --color-status-warn: #FBBF24;    /* amber-400 — stays luminous on dark */
+  --color-status-err:  #FB7185;    /* rose-400 — softer on dark */
+
+  --color-text: #F8FAFC;
+  --color-muted: #94A3B8;
+  --color-success: #10B981;
+
+  --color-grid: rgba(255, 255, 255, 0.04);
+  --color-overlay-soft: rgba(255, 255, 255, 0.03);
+  --color-overlay-medium: rgba(255, 255, 255, 0.06);
+  --color-shadow-card: rgba(0, 0, 0, 0.5);
+  --color-shadow-soft: rgba(0, 0, 0, 0.4);
+  --color-glass: rgba(17, 24, 39, 0.55);
+  --color-glass-soft: rgba(255, 255, 255, 0.03);
+  --color-glow-soft: rgba(96, 165, 250, 0.55);
+  --color-radial-glow: rgba(59, 130, 246, 0.18);
+
+  --color-art-bg-from: #1E293B;
+  --color-art-bg-to: #0F172A;
+  --color-art-grid: rgba(255, 255, 255, 0.05);
+  --color-art-stroke: rgba(255, 255, 255, 0.08);
+  --color-art-text: #F8FAFC;
+  --color-art-text-muted: #94A3B8;
+  --color-art-fg: rgba(255, 255, 255, 0.04);
+  --color-art-fg-strong: rgba(255, 255, 255, 0.07);
+
+  --color-scrollbar-track: #0F172A;
+  --color-scrollbar-thumb: #1E293B;
+  --color-scrollbar-thumb-hover: #334155;
+  --color-scrollbar-border: #0F172A;
+
+  --color-tint-from: rgba(59, 130, 246, 0.10);
+  --color-tint-via: rgba(139, 92, 246, 0.08);
+  --color-tint-to: rgba(16, 185, 129, 0.06);
+
+  color-scheme: dark;
+}
+
+/* -----------------------------------------------------------
+   Base
+----------------------------------------------------------- */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background: var(--color-bg);
+  transition: background-color 0.3s var(--ease-out-soft);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-family: var(--font-sans);
+  transition: background-color 0.3s var(--ease-out-soft),
+              color 0.3s var(--ease-out-soft);
+  min-height: 100vh;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* -----------------------------------------------------------
+   Theme transition — optimized smooth color swap.
+
+   The dark/light theme is implemented via CSS variables on
+   `:root` and `html.dark`. This optimized transition targets
+   only the most critical properties to prevent lag while
+   maintaining smooth visual transitions.
+----------------------------------------------------------- */
+body,
+.glass,
+.glass-soft,
+.surface-2,
+.card,
+button,
+a,
+input,
+textarea,
+select {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: var(--ease-out-soft);
+}
+
+svg {
+  transition-property: fill, stroke;
+  transition-duration: 0.3s;
+  transition-timing-function: var(--ease-out-soft);
+}
+
+/* Two soft, fixed-position color blobs that drift behind the whole page.
+   They give the light theme a warm, airy "morning" feel and the dark
+   theme a nebula-like backdrop. Color-tokens pick the theme variants. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 8% -10%, var(--color-tint-from), transparent 60%),
+    radial-gradient(50rem 35rem at 100% 20%, var(--color-tint-via), transparent 55%),
+    radial-gradient(60rem 45rem at 50% 110%, var(--color-tint-to), transparent 60%);
+  opacity: 0.9;
+  transition: opacity 0.5s var(--ease-out-soft);
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.25);
+  color: var(--color-text);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 8px;
+  border: 2px solid var(--color-scrollbar-border);
+  transition: background 0.3s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}
+
+/* -----------------------------------------------------------
+   Utility classes
+----------------------------------------------------------- */
+@layer utilities {
+  .glass {
+    background: var(--color-glass);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid var(--color-border);
+    transition: background-color 0.3s var(--ease-out-soft),
+                border-color 0.3s var(--ease-out-soft);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  .glass-soft {
+    background: var(--color-glass-soft);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-overlay-medium);
+    transition: background-color 0.3s var(--ease-out-soft),
+                border-color 0.3s var(--ease-out-soft);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  .section-tint {
+    background-image: linear-gradient(180deg,
+      var(--color-tint-from) 0%,
+      var(--color-tint-via) 40%,
+      var(--color-tint-to) 100%);
+  }
+
+  /* Subtle dotted/grain layer that gives light mode a paper feel */
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: radial-gradient(circle at 1px 1px,
+      rgba(15, 23, 42, 0.06) 1px, transparent 0);
+    background-size: 4px 4px;
+  }
+  html.dark .grain::before {
+    mix-blend-mode: screen;
+    opacity: 0.18;
+    background-image: radial-gradient(circle at 1px 1px,
+      rgba(255, 255, 255, 0.06) 1px, transparent 0);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  html.dark .gradient-text {
+    background: linear-gradient(135deg, #93C5FD 0%, #60A5FA 50%, #3B82F6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .gradient-border {
+    position: relative;
+    background: linear-gradient(180deg, var(--color-card) 0%, var(--color-bg) 100%);
+    border-radius: 1rem;
+    transition: background 0.4s var(--ease-out-soft);
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--color-glow-soft), transparent 60%, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.7;
+    transition: opacity 0.4s;
+  }
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  .glow-on-hover {
+    transition: box-shadow 0.5s var(--ease-out-soft),
+                transform 0.5s var(--ease-out-soft),
+                border-color 0.5s var(--ease-out-soft),
+                background-color 0.5s var(--ease-out-soft);
+    will-change: transform, box-shadow;
+  }
+  .glow-on-hover:hover {
+    box-shadow: 0 0 0 1px var(--color-glow-soft),
+                0 0 30px -5px rgba(59, 130, 246, 0.35),
+                0 12px 32px -8px var(--color-shadow-card);
+    transform: translateY(-4px);
+    border-color: var(--color-glow-soft);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .bg-radial-glow {
+    background: radial-gradient(ellipse at top, var(--color-radial-glow), transparent 50%);
+  }
+
+  /* Animated underline */
+  .animated-underline {
+    position: relative;
+  }
+  .animated-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, #3B82F6, #60A5FA);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out-soft);
+    will-change: transform;
+  }
+  .animated-underline:hover::after,
+  .animated-underline.active::after {
+    transform: scaleX(1);
+  }
+
+  /* Soft elevation utility for light mode */
+  .elevation-soft {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
+                0 4px 16px -6px rgba(15, 23, 42, 0.08);
+  }
+  html.dark .elevation-soft {
+    box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Surface-2 — a slightly elevated neutral background for sub-cards */
+  .surface-2 {
+    background: var(--color-bg-secondary);
+    transition: background-color 0.3s var(--ease-out-soft);
+  }
+
+  /* A subtle horizontal hairline that adapts to the theme */
+  .hairline {
+    border-color: var(--color-border);
+  }
+  .hairline-strong {
+    border-color: var(--color-border-strong);
+  }
+}
+
+/* -----------------------------------------------------------
+   Reduced motion
+----------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* -----------------------------------------------------------
+   Spotify equalizer animation
+----------------------------------------------------------- */
+@keyframes eq-bounce {
+  0%, 100% { height: 30%; }
+  50%      { height: 100%; }
+}
+.animate-eq { animation: eq-bounce 900ms ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-eq { animation: none; height: 60%; }
+}
