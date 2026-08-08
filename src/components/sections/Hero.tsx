@@ -10,7 +10,6 @@ import { FaDownload, FaPaperPlane, FaFolderOpen } from 'react-icons/fa';
 import { LinkButton } from '@/components/Button';
 import { FloatingShapes } from '@/components/FloatingShapes';
 import { HeroAvatar } from '@/components/sections/HeroAvatar';
-import { SpotifyNowPlaying } from '@/components/SpotifyNowPlaying';
 import { useTypingEffect } from '@/hooks/useTypingEffect';
 import { useFastScramble } from '@/hooks/useFastScramble';
 import { personalInfo, typingRoles } from '@/constants/personal';
@@ -70,11 +69,6 @@ export function Hero() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
             </span>
             Open for opportunities
-          </motion.div>
-
-          {/* Spotify Now Playing */}
-          <motion.div variants={fadeUp} className="mt-4">
-            <SpotifyNowPlaying />
           </motion.div>
 
           {/* Eyebrow — "Hello, I'm" lifted above the name */}
