@@ -9,8 +9,8 @@
 ----------------------------------------------------------- */
 :root {
   /* Surface */
-  --color-bg: #F8FAFC;             /* page background (slate-50) */
-  --color-bg-secondary: #EEF2F7;   /* alt section background (soft slate) */
+  --color-bg: #FFFFFF;             /* page background (white) */
+  --color-bg-secondary: #F8FAFC;   /* alt section background (soft slate) */
   --color-card: #FFFFFF;           /* card / surface (white) */
   --color-border: rgba(15, 23, 42, 0.08); /* slate-900 @ 8% */
   --color-border-strong: rgba(15, 23, 42, 0.12);
@@ -45,20 +45,20 @@
   --color-radial-glow: rgba(59, 130, 246, 0.10);
 
   /* SVG artwork */
-  --color-art-bg-from: #EEF2F7;
-  --color-art-bg-to: #DBE3EE;
-  --color-art-grid: rgba(15, 23, 42, 0.05);
-  --color-art-stroke: rgba(15, 23, 42, 0.08);
+  --color-art-bg-from: #F8FAFC;
+  --color-art-bg-to: #F1F5F9;
+  --color-art-grid: rgba(15, 23, 42, 0.04);
+  --color-art-stroke: rgba(15, 23, 42, 0.06);
   --color-art-text: #0F172A;
   --color-art-text-muted: #475569;
-  --color-art-fg: rgba(15, 23, 42, 0.04);
-  --color-art-fg-strong: rgba(15, 23, 42, 0.06);
+  --color-art-fg: rgba(15, 23, 42, 0.03);
+  --color-art-fg-strong: rgba(15, 23, 42, 0.05);
 
   /* Scrollbar */
-  --color-scrollbar-track: #F1F5F9;
-  --color-scrollbar-thumb: #CBD5E1;
-  --color-scrollbar-thumb-hover: #94A3B8;
-  --color-scrollbar-border: #F1F5F9;
+  --color-scrollbar-track: #FFFFFF;
+  --color-scrollbar-thumb: #E2E8F0;
+  --color-scrollbar-thumb-hover: #CBD5E1;
+  --color-scrollbar-border: #FFFFFF;
 
   /* Type & easing */
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -397,6 +397,83 @@ body::before {
   .hairline-strong {
     border-color: var(--color-border-strong);
   }
+
+  /* -----------------------------------------------------------
+     Skills globe utilities
+  ----------------------------------------------------------- */
+  .gradient-text-purple {
+    background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 50%, #4F46E5 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  html.dark .gradient-text-purple {
+    background: linear-gradient(135deg, #C4B5FD 0%, #A78BFA 40%, #60A5FA 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Glass card used by each floating tech node on the 3D globe.
+     Keeps the same `glass` look as the rest of the site but with a
+     tighter padding and rounded-full shape suited for inline icons. */
+  .globe-card {
+    background: var(--color-glass);
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+    border: 1px solid var(--color-border);
+    transition: transform 0.35s var(--ease-out-soft),
+                box-shadow 0.35s var(--ease-out-soft),
+                border-color 0.35s var(--ease-out-soft),
+                background-color 0.35s var(--ease-out-soft);
+    will-change: transform;
+    font-family: var(--font-sans);
+  }
+  .globe-card:hover,
+  .globe-card:focus-visible {
+    transform: scale(1.08);
+    border-color: var(--color-glow-soft);
+    box-shadow: 0 0 0 1px var(--color-glow-soft),
+                0 8px 24px -8px rgba(59, 130, 246, 0.45),
+                0 0 30px -5px rgba(139, 92, 246, 0.45);
+    outline: none;
+  }
+  .globe-card.selected {
+    border-color: var(--color-glow-soft);
+    box-shadow: 0 0 0 1px var(--color-glow-soft),
+                0 8px 24px -6px rgba(139, 92, 246, 0.55),
+                0 0 40px -6px rgba(96, 165, 250, 0.55);
+  }
+
+  /* Hexagon clip-path used by the HUD behind the < /> core icon */
+  .globe-hexagon {
+    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+    -webkit-clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  }
+
+  /* Pulsing ring around the core */
+  .globe-pulse-ring {
+    animation: globePulse 3.2s ease-in-out infinite;
+  }
+  @keyframes globePulse {
+    0%, 100% { transform: scale(1); opacity: 0.55; }
+    50%      { transform: scale(1.08); opacity: 1; }
+  }
+
+  /* Soft dark-mode-only backdrop for the globe column */
+  .skills-backdrop {
+    background:
+      radial-gradient(40rem 28rem at 50% 40%, rgba(59, 130, 246, 0.10), transparent 60%),
+      radial-gradient(30rem 22rem at 80% 70%, rgba(139, 92, 246, 0.10), transparent 60%);
+  }
+  html.dark .skills-backdrop {
+    background:
+      radial-gradient(45rem 32rem at 50% 50%, rgba(59, 130, 246, 0.22), transparent 65%),
+      radial-gradient(30rem 22rem at 80% 70%, rgba(139, 92, 246, 0.22), transparent 60%),
+      radial-gradient(80rem 60rem at 50% 50%, rgba(15, 23, 42, 0.85), transparent 75%);
+  }
 }
 
 /* -----------------------------------------------------------
@@ -410,5 +487,26 @@ body::before {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* -----------------------------------------------------------
+   Keyframes
+----------------------------------------------------------- */
+
+/** Infinite horizontal scroll — used by the tech ticker on the
+   Skills section. The marquee is duplicated (so the loop is seamless)
+   and translated by exactly half its width. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
   }
 }

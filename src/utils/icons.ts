@@ -2,22 +2,23 @@ import type { IconType } from 'react-icons';
 import {
   FaHtml5, FaCss3Alt, FaJs, FaReact, FaPhp, FaNodeJs, FaJava, FaGithub,
   FaGitAlt, FaFigma, FaLinkedinIn, FaTwitter, FaEnvelope, FaCode,
+  FaPython,
 } from 'react-icons/fa';
 import {
   SiTailwindcss, SiExpress, SiMysql, SiMongodb, SiCplusplus,
-  SiVscodium, SiPostman, SiSolidity, SiEthereum,
+  SiVscodium, SiPostman, SiSolidity, SiEthereum, SiThreedotjs,
 } from 'react-icons/si';
 
 type IconMap = Record<string, IconType>;
 
 const faIcons: IconMap = {
   FaHtml5, FaCss3Alt, FaJs, FaReact, FaPhp, FaNodeJs, FaJava, FaGithub,
-  FaGitAlt, FaFigma, FaLinkedinIn, FaTwitter, FaEnvelope,
+  FaGitAlt, FaFigma, FaLinkedinIn, FaTwitter, FaEnvelope, FaPython,
 };
 
 const siIcons: IconMap = {
   SiTailwindcss, SiExpress, SiMysql, SiMongodb, SiCplusplus,
-  SiVscodium, SiPostman, SiSolidity, SiEthereum,
+  SiVscodium, SiPostman, SiSolidity, SiEthereum, SiThreedotjs,
 };
 
 /**
