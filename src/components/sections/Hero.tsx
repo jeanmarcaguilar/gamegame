@@ -12,6 +12,7 @@ import { HeroAvatar } from '@/components/sections/HeroAvatar';
 import { useTypingEffect } from '@/hooks/useTypingEffect';
 import { personalInfo, typingRoles } from '@/constants/personal';
 import { fadeUp, staggerContainer } from '@/animations/variants';
+import TypewriterText from '@/components/TypewriterText';
 
 export function Hero() {
   const typed = useTypingEffect(typingRoles);
@@ -35,11 +36,6 @@ export function Hero() {
     }, el);
     return () => ctx.revert();
   }, []);
-
-  // Split name for styling
-  const nameParts = personalInfo.name.split(' ');
-  const lastName = nameParts.pop();
-  const firstName = nameParts.join(' ');
 
   return (
     <section
@@ -70,13 +66,30 @@ export function Hero() {
           </motion.p>
 
           {/* Hero Name */}
-          <motion.h1
+          <motion.div
             variants={fadeUp}
-            className="font-display text-5xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[5rem]"
+            className="mb-2"
           >
-            {firstName} <br />
-            <span className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]">{lastName}</span>
-          </motion.h1>
+            <TypewriterText 
+              font={{
+                fontFamily: "font-display",
+                fontWeight: 900,
+                fontSize: "clamp(48px, 5vw, 80px)",
+                textAlign: "left",
+                lineHeight: "1.1",
+                letterSpacing: "-0.02em"
+              }}
+              cursorColor="#FFFFFF"
+              cursorBorderColor="rgba(255,255,255,0.5)"
+              cursorWidth={6}
+              cursorHeight={67}
+              deletingSpeed={75}
+              style={{
+                color: "#FFFFFF",
+                textShadow: "0 0 25px rgba(255,255,255,0.7)"
+              }}
+            />
+          </motion.div>
 
           {/* Subtitle */}
           <motion.div

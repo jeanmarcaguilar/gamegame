@@ -1,6 +1,7 @@
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/sections/Footer';
-import { Navbar } from './Navbar';
 import { ThemeTransition } from '@/components/ThemeTransition';
+import UserCursor from '@/components/UserCursor';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 
 interface LayoutProps {
@@ -23,6 +24,7 @@ export default function Layout({ children }: LayoutProps) {
       </main>
       <Footer />
       <ThemeTransition />
+      <UserCursor />
     </div>
   );
 }
