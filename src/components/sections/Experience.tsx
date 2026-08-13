@@ -39,11 +39,11 @@ export function Experience() {
         </div>
 
         {/* Timeline */}
-        <div className="relative mt-20">
+        <div className="relative mt-16">
           {/* Vertical line container */}
           <div className="absolute left-[100px] md:left-[160px] top-6 bottom-0 w-px bg-white/10" />
           
-          <ul className="space-y-12">
+          <ul className="space-y-8">
             {experiences.map((entry, i) => (
               <TimelineItem key={entry.id} entry={entry} index={i} />
             ))}

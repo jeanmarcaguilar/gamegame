@@ -53,49 +53,49 @@ export function TimelineItem({ entry, index }: TimelineItemProps) {
       </div>
 
       {/* Middle: Vertical line overlap & Dot */}
-      <div className="relative flex flex-col items-center mt-[1.65rem] shrink-0 w-px">
-        <div className={`relative z-20 h-2.5 w-2.5 md:h-3 md:w-3 -ml-[1px] rounded-full ${theme.dotColor} ${theme.textColor} ${theme.glow} ring-4 ring-[#080b14] transition-transform duration-300 group-hover:scale-125`} />
+      <div className="relative flex flex-col items-center mt-[1.25rem] shrink-0 w-px">
+        <div className={`relative z-20 h-2 w-2 md:h-2.5 md:w-2.5 -ml-[1px] rounded-full ${theme.dotColor} ${theme.textColor} ${theme.glow} ring-4 ring-[#080b14] transition-transform duration-300 group-hover:scale-125`} />
       </div>
 
       {/* Right: Themed Card */}
-      <div className="ml-6 md:ml-10 flex-1">
-        <div className={`relative overflow-hidden rounded-2xl bg-[#0a0f1c] border ${theme.borderColor} ${theme.hoverBorder} p-6 md:p-8 transition-colors duration-500`}>
+      <div className="ml-6 md:ml-10 flex-1 max-w-xs">
+        <div className={`relative overflow-hidden rounded-2xl bg-[#0a0f1c] border ${theme.borderColor} ${theme.hoverBorder} p-2.5 md:p-3 transition-colors duration-500`}>
           
           {/* Ambient background glow inside the card */}
           <div className={`absolute -right-20 -top-20 h-64 w-64 rounded-full blur-[80px] opacity-20 pointer-events-none ${theme.bg}`} />
           {/* Subtle dot pattern background on the right */}
           <div className="absolute right-0 top-0 bottom-0 w-32 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
 
-          <div className="relative z-10 flex items-start gap-4 md:gap-5">
+          <div className="relative z-10 flex items-start gap-2 md:gap-3">
             {/* Icon Box */}
-            <div className={`flex shrink-0 h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl ${theme.iconBg} border ${theme.borderColor} ${theme.textColor}`}>
-              <Icon className="h-5 w-5 md:h-6 md:w-6" />
+            <div className={`flex shrink-0 h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-xl ${theme.iconBg} border ${theme.borderColor} ${theme.textColor}`}>
+              <Icon className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </div>
 
             {/* Header Text */}
-            <div className="flex-1 min-w-0 pt-0.5">
-              <span className={`text-[10px] md:text-xs font-bold uppercase tracking-wider ${theme.textColor}`}>
+            <div className="flex-1 min-w-0">
+              <span className={`text-[8px] md:text-[9px] font-bold uppercase tracking-wider ${theme.textColor}`}>
                 {entry.type === 'Academic' ? 'Academic Projects' : entry.type}
               </span>
-              <h3 className="mt-1 font-display text-lg md:text-xl font-bold leading-tight text-white">
+              <h3 className="mt-0.5 font-display text-sm md:text-base font-bold leading-tight text-white">
                 {entry.title}
               </h3>
-              <p className="mt-1 text-xs md:text-sm text-gray-400">
+              <p className="mt-0 text-[10px] md:text-[11px] text-gray-400">
                 {entry.organization}
               </p>
             </div>
           </div>
 
-          <div className="relative z-10 mt-6 border-t border-white/5 pt-5">
-            <p className="text-sm leading-relaxed text-gray-300">
+          <div className="relative z-10 mt-2 border-t border-white/5 pt-2">
+            <p className="text-[11px] md:text-xs leading-relaxed text-gray-300">
               {entry.description}
             </p>
 
             {entry.highlights && entry.highlights.length > 0 && (
-              <ul className="mt-4 space-y-2.5">
+              <ul className="mt-2 space-y-1">
                 {entry.highlights.map((h) => (
-                  <li key={h} className="flex items-start gap-3 text-xs md:text-sm text-gray-400 leading-relaxed">
-                    <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${theme.dotColor}`} />
+                  <li key={h} className="flex items-start gap-2 text-[10px] md:text-[11px] text-gray-400 leading-relaxed">
+                    <span className={`mt-0.5 inline-block h-1 w-1 shrink-0 rounded-full ${theme.dotColor}`} />
                     <span>{h}</span>
                   </li>
                 ))}

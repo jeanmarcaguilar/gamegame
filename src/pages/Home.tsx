@@ -6,6 +6,7 @@ import { Projects } from '@/components/sections/Projects';
 import { Experience } from '@/components/sections/Experience';
 import { Certificates } from '@/components/sections/Certificates';
 import { Contact } from '@/components/sections/Contact';
+import { Divider } from '@/components/Divider';
 import { personalInfo } from '@/constants/personal';
 
 export default function Home() {
@@ -16,11 +17,17 @@ export default function Home() {
         <meta name="description" content={personalInfo.bio} />
       </Helmet>
       <Hero />
+      <Divider />
       <About />
+      <Divider />
       <Skills />
+      <Divider />
       <Projects />
+      <Divider />
       <Experience />
+      <Divider />
       <Certificates />
+      <Divider />
       <Contact />
     </>
   );

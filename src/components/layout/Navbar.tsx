@@ -86,7 +86,7 @@ function useScrollState() {
   return { scrolled, progress, velocity };
 }
 
-function CapsuleNav({ activeId }: { activeId: string | null }) {
+function CapsuleNav({ activeId, onNavClick }: { activeId: string | null; onNavClick: (id: string) => void }) {
   const { scrolled, progress, velocity } = useScrollState();
   const [droplets, setDroplets] = useState<SplatterDroplet[]>([]);
   const [scrollBubbles, setScrollBubbles] = useState<FloatingBubble[]>([]);
@@ -107,7 +107,9 @@ function CapsuleNav({ activeId }: { activeId: string | null }) {
   }, [velocity, scaleX, scaleY]);
 
   // Click-triggered liquid splatters
-  const handleIconClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleIconClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    onNavClick(id);
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const container = e.currentTarget.parentElement;
     if (!container) return;
@@ -135,7 +137,7 @@ function CapsuleNav({ activeId }: { activeId: string | null }) {
     setTimeout(() => {
       setDroplets((prev) => prev.filter((d) => !newDroplets.includes(d)));
     }, 650);
-  }, []);
+  }, [onNavClick]);
 
   // Scroll velocity-triggered floating liquid bubbles
   useEffect(() => {
@@ -180,7 +182,7 @@ function CapsuleNav({ activeId }: { activeId: string | null }) {
       }}
       className="flex justify-center pointer-events-none select-none px-4"
     >
-      <div className="w-full max-w-5xl flex items-center justify-between pointer-events-none">
+      <div className="w-full max-w-5xl flex items-center justify-center pointer-events-none">
         
         {/* 1. Left Column: holds the logo, aligned to right edge next to capsule */}
         <div className="flex-1 hidden sm:flex justify-end pr-4 pointer-events-auto">
@@ -331,7 +333,7 @@ function CapsuleNav({ activeId }: { activeId: string | null }) {
                     href={link.href}
                     aria-label={link.label}
                     aria-current={isActive ? 'page' : undefined}
-                    onClick={handleIconClick}
+                    onClick={(e) => handleIconClick(e, id)}
                     className="group relative flex items-center justify-center focus:outline-none"
                     style={{ width: 40, height: 40, borderRadius: '9999px' }}
                   >
@@ -390,6 +392,7 @@ function CapsuleNav({ activeId }: { activeId: string | null }) {
 
 export function Navbar() {
   const activeId = useScrollSpy(sectionIds);
+  const [manualActiveId, setManualActiveId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [theme] = useTheme();
 
@@ -399,6 +402,21 @@ export function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Use manual active ID if set, otherwise use scroll spy
+  const displayActiveId = manualActiveId ?? activeId;
+
+  // Reset manual active ID after scroll settles
+  useEffect(() => {
+    if (manualActiveId) {
+      const timeout = setTimeout(() => setManualActiveId(null), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [manualActiveId]);
+
+  const handleNavClick = (id: string) => {
+    setManualActiveId(id);
+  };
 
   return (
     <>
@@ -439,7 +457,7 @@ export function Navbar() {
         </div>
       </header>
 
-      <CapsuleNav activeId={activeId} />
+      <CapsuleNav activeId={displayActiveId} onNavClick={handleNavClick} />
 
       <span hidden data-theme={theme} />
     </>

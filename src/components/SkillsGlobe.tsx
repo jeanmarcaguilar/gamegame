@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Html, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import type { GlobeSkill } from '@/constants/skills';
 import { getIcon } from '@/utils/icons';
@@ -30,8 +30,6 @@ const PALETTE = {
 /** Sphere geometry radius — every other distance is derived from this. */
 const GLOBE_RADIUS = 2.0;
 
-/** Skill tags sit slightly above the surface so they're never clipped. */
-const NODE_OFFSET = 0.22;
 
 /** Auto-rotation speed in rad/sec when idle. */
 const AUTO_ROTATE_SPEED = 0.18;
@@ -40,18 +38,6 @@ const AUTO_ROTATE_SPEED = 0.18;
 // Geometry helpers
 // ----------------------------------------------------------------
 
-/** Fibonacci sphere — returns unit vectors. */
-function fibonacciSphere(count: number): [number, number, number][] {
-  const out: [number, number, number][] = [];
-  const phi = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < count; i++) {
-    const y = 1 - (i / Math.max(count - 1, 1)) * 2;
-    const r = Math.sqrt(1 - y * y);
-    const theta = phi * i;
-    out.push([Math.cos(theta) * r, y, Math.sin(theta) * r]);
-  }
-  return out;
-}
 
 /** Seeded RNG for stable particle layout across renders. */
 function mulberry32(seed: number) {
@@ -184,96 +170,9 @@ function GlassGlobe({
   );
 }
 
-/** A single floating skill tag — frosted-glass card, icon on top,
- *  label beneath. Drei <Html> auto-billboards toward the camera. */
-function SkillTag({
-  position,
-  skill,
-  onHover,
-  onSelect,
-  hovered,
-}: {
-  position: [number, number, number];
-  skill: GlobeSkill;
-  onHover: (name: string | null) => void;
-  onSelect: (skill: GlobeSkill) => void;
-  hovered: boolean;
-}) {
-  const Icon = getIcon(skill.icon);
-  return (
-    <Html
-      position={position}
-      center
-      distanceFactor={6}
-      style={{ pointerEvents: 'auto' }}
-      zIndexRange={[40, 0]}
-    >
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect(skill);
-        }}
-        onPointerEnter={(e) => {
-          e.stopPropagation();
-          onHover(skill.name);
-        }}
-        onPointerLeave={(e) => {
-          e.stopPropagation();
-          onHover(null);
-        }}
-        aria-label={skill.name}
-        className="flex select-none flex-col items-center gap-1 rounded-xl px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider"
-        style={{
-          color: hovered ? '#0f172a' : '#ffffff',
-          background: hovered
-            ? 'rgba(255, 255, 255, 0.92)'
-            : 'rgba(255, 255, 255, 0.10)',
-          backdropFilter: 'blur(10px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(10px) saturate(160%)',
-          border: hovered
-            ? '1px solid rgba(255, 255, 255, 0.9)'
-            : '1px solid rgba(255, 255, 255, 0.32)',
-          boxShadow: hovered
-            ? '0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 24px -4px rgba(255, 255, 255, 0.7), 0 8px 24px -10px rgba(0, 0, 0, 0.4)'
-            : '0 4px 16px -8px rgba(0, 0, 0, 0.35)',
-          transform: `scale(${hovered ? 1.15 : 1})`,
-          pointerEvents: 'auto',
-          cursor: 'pointer',
-          transition: 'transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
-        }}
-      >
-        <span
-          aria-hidden
-          className="flex h-7 w-7 items-center justify-center rounded-full"
-          style={{
-            background: hovered
-              ? 'rgba(15, 23, 42, 0.08)'
-              : 'rgba(255, 255, 255, 0.18)',
-            color: hovered ? '#0f172a' : '#ffffff',
-            transition: 'background 0.25s ease, color 0.25s ease',
-          }}
-        >
-          <Icon className="h-3.5 w-3.5" />
-        </span>
-        <span className="whitespace-nowrap">{skill.name}</span>
-      </button>
-    </Html>
-  );
-}
 
 /** Rotating container holding the glass globe and skill tags. */
-function SkillsSphere({
-  skills,
-  hovered,
-  onHover,
-  onSelect,
-}: {
-  skills: GlobeSkill[];
-  hovered: string | null;
-  onHover: (name: string | null) => void;
-  onSelect: (skill: GlobeSkill) => void;
-}) {
+function SkillsSphere() {
   const groupRef = useRef<THREE.Group>(null!);
 
   // Continuous Y-axis auto-rotation of the sphere itself.
@@ -281,31 +180,11 @@ function SkillsSphere({
     if (groupRef.current) groupRef.current.rotation.y += delta * AUTO_ROTATE_SPEED;
   });
 
-  // Place skill tags evenly on the sphere surface using Fibonacci.
-  const positions = useMemo<[number, number, number][]>(
-    () =>
-      fibonacciSphere(skills.length).map(([x, y, z]) => [
-        x * (GLOBE_RADIUS + NODE_OFFSET),
-        y * (GLOBE_RADIUS + NODE_OFFSET),
-        z * (GLOBE_RADIUS + NODE_OFFSET),
-      ]),
-    [skills.length],
-  );
 
   return (
     <group ref={groupRef}>
       <GlassGlobe radius={GLOBE_RADIUS} />
       <FloatingDust />
-      {skills.map((skill, i) => (
-        <SkillTag
-          key={skill.name}
-          position={positions[i]}
-          skill={skill}
-          hovered={hovered === skill.name}
-          onHover={onHover}
-          onSelect={onSelect}
-        />
-      ))}
     </group>
   );
 }
@@ -354,9 +233,6 @@ interface SkillsGlobeProps {
  *   - `category`: optional grouping for the HUD
  */
 export function SkillsGlobe({ skills }: SkillsGlobeProps) {
-  const [autoRotate, setAutoRotate] = useState(true);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [selected, setSelected] = useState<GlobeSkill | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -368,19 +244,6 @@ export function SkillsGlobe({ skills }: SkillsGlobeProps) {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  // Pause auto-rotate on drag, resume a beat after release.
-  const resumeTimer = useRef<number | null>(null);
-  const handleStart = () => {
-    if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
-    resumeTimer.current = null;
-    setAutoRotate(false);
-  };
-  const handleEnd = () => {
-    if (resumeTimer.current) window.clearTimeout(resumeTimer.current);
-    resumeTimer.current = window.setTimeout(() => setAutoRotate(true), 900);
-  };
-
-  const onPointerMissed = () => setSelected(null);
 
   if (reducedMotion) {
     return (
@@ -402,7 +265,6 @@ export function SkillsGlobe({ skills }: SkillsGlobeProps) {
           premultipliedAlpha: false,
         }}
         style={{ background: 'transparent' }}
-        onPointerMissed={onPointerMissed}
       >
         {/* No scene background — the page bleeds through for true transparency. */}
         <Suspense fallback={null}>
@@ -412,12 +274,7 @@ export function SkillsGlobe({ skills }: SkillsGlobeProps) {
           <pointLight position={[0, 0, 5]} intensity={1.0} color="#ffffff" />
           <pointLight position={[3, -2, 4]} intensity={0.7} color="#e0e7ff" />
 
-          <SkillsSphere
-            skills={skills}
-            hovered={hovered}
-            onHover={setHovered}
-            onSelect={setSelected}
-          />
+          <SkillsSphere />
 
           <OrbitControls
             enablePan={false}
@@ -426,36 +283,12 @@ export function SkillsGlobe({ skills }: SkillsGlobeProps) {
             dampingFactor={0.08}
             minDistance={4}
             maxDistance={11}
-            autoRotate={autoRotate}
+            autoRotate
             autoRotateSpeed={0.6}
-            onStart={handleStart}
-            onEnd={handleEnd}
           />
         </Suspense>
       </Canvas>
 
-      {/* Selection HUD — frosted-white pill matching the theme. Only
-         shown when a skill is actually picked so it doesn't compete
-         with the section header. */}
-      {selected && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center sm:bottom-4">
-          <div
-            aria-live="polite"
-            className="pointer-events-auto rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-medium text-white shadow-lg backdrop-blur-md"
-          >
-            <span className="flex items-center gap-2">
-              <span
-                aria-hidden
-                className="h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]"
-              />
-              <span className="font-semibold">{selected.name}</span>
-              {selected.category && (
-                <span className="text-white/70">· {selected.category}</span>
-              )}
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
