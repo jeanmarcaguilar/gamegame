@@ -17,11 +17,11 @@ export function Contact() {
       
       {/* Ambient glowing orbits background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
-        <div className="absolute top-20 -left-[20%] w-[50%] h-[500px] rounded-[100%] border-t border-r border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.1)] -rotate-12" />
-        <div className="absolute bottom-10 -right-[10%] w-[40%] h-[400px] rounded-[100%] border-t border-l border-blue-400/30 rotate-45" />
+        <div className="absolute top-20 -left-[20%] w-[50%] h-[500px] rounded-[100%] border-t border-r border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)] -rotate-12" />
+        <div className="absolute bottom-10 -right-[10%] w-[40%] h-[400px] rounded-[100%] border-t border-l border-white/30 rotate-45" />
         {/* Glow points */}
-        <div className="absolute top-[35%] left-[5%] h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_12px_3px_rgba(59,130,246,0.8)]" />
-        <div className="absolute bottom-[20%] right-[15%] h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_10px_2px_rgba(96,165,250,0.8)]" />
+        <div className="absolute top-[35%] left-[5%] h-2 w-2 rounded-full bg-white shadow-[0_0_12px_3px_rgba(255,255,255,0.9)]" />
+        <div className="absolute bottom-[20%] right-[15%] h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.8)]" />
       </div>
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -29,9 +29,9 @@ export function Contact() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
-              <span className="text-[11px] font-bold tracking-[0.2em] text-blue-500 uppercase">Contact</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3.5 py-1 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+              <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+              <span className="text-[11px] font-bold tracking-[0.2em] text-white uppercase">Contact</span>
             </div>
           </motion.div>
 
@@ -43,7 +43,7 @@ export function Contact() {
             className="font-display text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl text-balance"
           >
             Let&apos;s build <br className="hidden sm:block" />
-            <span className="text-blue-500">something together</span>
+            <span className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]">something together</span>
           </motion.h2>
 
           <motion.p
@@ -72,13 +72,13 @@ export function Contact() {
               const content = (
                 <motion.div
                   variants={fadeUp}
-                  className="group flex items-center gap-5 rounded-2xl bg-[#080b14] border border-white/5 p-4 transition-all duration-300 hover:border-blue-500/30 hover:bg-[#0a0f1c]"
+                  className="group flex items-center gap-5 rounded-2xl bg-[#09090C] border border-white/10 p-4 transition-all duration-300 hover:border-white/30 hover:bg-[#121216] hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]"
                 >
-                  <div className="flex shrink-0 h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 transition-colors group-hover:bg-blue-500/20">
+                  <div className="flex shrink-0 h-12 w-12 items-center justify-center rounded-xl bg-white/15 border border-white/20 text-white shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-colors group-hover:bg-white/25">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-0.5">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-white mb-0.5">
                       {item.label}
                     </div>
                     <div className="truncate text-[13px] font-medium text-gray-300 group-hover:text-white transition-colors">
@@ -94,7 +94,7 @@ export function Contact() {
                   href={item.href}
                   target={item.href.startsWith('http') ? '_blank' : undefined}
                   rel={item.href.startsWith('http') ? 'noreferrer noopener' : undefined}
-                  className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-2xl"
+                  className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-2xl"
                 >
                   {content}
                 </a>

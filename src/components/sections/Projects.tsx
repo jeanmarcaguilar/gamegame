@@ -17,11 +17,11 @@ export function Projects() {
     <section id="projects" className="relative py-24 sm:py-28 lg:py-36 overflow-hidden">
       {/* Background Orbits */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[400px] pointer-events-none opacity-40">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[200px] rounded-[100%] border-t border-blue-500/20 shadow-[0_-10px_30px_rgba(59,130,246,0.1)]" />
-        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[600px] h-[150px] rounded-[100%] border-t border-blue-400/30" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[200px] rounded-[100%] border-t border-white/20 shadow-[0_-10px_30px_rgba(255,255,255,0.15)]" />
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[600px] h-[150px] rounded-[100%] border-t border-white/30" />
         {/* Glowing dots on orbits */}
-        <div className="absolute top-[21%] left-[30%] h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_10px_2px_rgba(96,165,250,0.8)]" />
-        <div className="absolute top-[28%] right-[35%] h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_12px_3px_rgba(59,130,246,0.8)]" />
+        <div className="absolute top-[21%] left-[30%] h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.9)]" />
+        <div className="absolute top-[28%] right-[35%] h-2 w-2 rounded-full bg-white shadow-[0_0_12px_3px_rgba(255,255,255,0.9)]" />
       </div>
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -29,9 +29,9 @@ export function Projects() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
-              <span className="text-[11px] font-bold tracking-[0.2em] text-blue-500 uppercase">Projects</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3.5 py-1 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+              <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+              <span className="text-[11px] font-bold tracking-[0.2em] text-white uppercase">Projects</span>
             </div>
           </motion.div>
 
@@ -42,7 +42,7 @@ export function Projects() {
             viewport={{ once: true }}
             className="font-display text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl text-balance"
           >
-            Featured <span className="text-blue-500">work</span>
+            Featured <span className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]">work</span>
           </motion.h2>
 
           <motion.p

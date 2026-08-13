@@ -157,13 +157,13 @@ function Detail({ label, body }: { label: string; body: string }) {
 
 function ModalArtwork({ id }: { id: string }) {
   const palettes: Record<string, [string, string, string]> = {
-    'smart-campus-attendance': ['#3B82F6', '#60A5FA', '#93C5FD'],
-    'blockchain-ecommerce': ['#8B5CF6', '#60A5FA', '#A78BFA'],
-    'parking-management': ['#10B981', '#34D399', '#60A5FA'],
-    'loan-management': ['#F59E0B', '#FBBF24', '#60A5FA'],
-    'portfolio-website': ['#60A5FA', '#3B82F6', '#2563EB'],
+    'smart-campus-attendance': ['#FFFFFF', '#E2E8F0', '#94A3B8'],
+    'blockchain-ecommerce': ['#FFFFFF', '#CBD5E1', '#64748B'],
+    'parking-management': ['#FFFFFF', '#E2E8F0', '#94A3B8'],
+    'loan-management': ['#FFFFFF', '#CBD5E1', '#64748B'],
+    'portfolio-website': ['#FFFFFF', '#E2E8F0', '#94A3B8'],
   };
-  const [a, b] = palettes[id] ?? ['#3B82F6', '#60A5FA', '#93C5FD'];
+  const [a, b] = palettes[id] ?? ['#FFFFFF', '#E2E8F0', '#94A3B8'];
 
   return (
     <svg viewBox="0 0 1000 430" className="h-full w-full" preserveAspectRatio="xMidYMid slice">

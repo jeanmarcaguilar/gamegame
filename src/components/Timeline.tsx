@@ -9,54 +9,19 @@ const iconMap: Record<string, any> = {
   Achievement: FaTrophy,
 };
 
-function getThemeInfo(type: string) {
-  switch (type) {
-    case 'Freelance':
-      return {
-        color: 'blue',
-        borderColor: 'border-blue-500/30',
-        hoverBorder: 'group-hover:border-blue-400/50',
-        bg: 'bg-blue-500/10',
-        iconBg: 'bg-blue-500/20',
-        textColor: 'text-blue-400',
-        dotColor: 'bg-blue-500',
-        glow: 'shadow-[0_0_10px_currentColor]',
-      };
-    case 'Internship':
-      return {
-        color: 'teal',
-        borderColor: 'border-teal-500/30',
-        hoverBorder: 'group-hover:border-teal-400/50',
-        bg: 'bg-teal-500/10',
-        iconBg: 'bg-teal-500/20',
-        textColor: 'text-teal-400',
-        dotColor: 'bg-teal-500',
-        glow: 'shadow-[0_0_10px_currentColor]',
-      };
-    case 'Academic':
-      return {
-        color: 'purple',
-        borderColor: 'border-purple-500/30',
-        hoverBorder: 'group-hover:border-purple-400/50',
-        bg: 'bg-purple-500/10',
-        iconBg: 'bg-purple-500/20',
-        textColor: 'text-purple-400',
-        dotColor: 'bg-purple-500',
-        glow: 'shadow-[0_0_10px_currentColor]',
-      };
-    case 'Achievement':
-    default:
-      return {
-        color: 'yellow',
-        borderColor: 'border-yellow-500/30',
-        hoverBorder: 'group-hover:border-yellow-400/50',
-        bg: 'bg-yellow-500/10',
-        iconBg: 'bg-yellow-500/20',
-        textColor: 'text-yellow-400',
-        dotColor: 'bg-yellow-500',
-        glow: 'shadow-[0_0_10px_currentColor]',
-      };
-  }
+function getThemeInfo(_type?: string) {
+  const baseWhite = {
+    color: 'white',
+    borderColor: 'border-white/20',
+    hoverBorder: 'group-hover:border-white/50',
+    bg: 'bg-white/10',
+    iconBg: 'bg-white/15',
+    textColor: 'text-white',
+    dotColor: 'bg-white',
+    glow: 'shadow-[0_0_12px_rgba(255,255,255,0.9)]',
+  };
+
+  return baseWhite;
 }
 
 interface TimelineItemProps {

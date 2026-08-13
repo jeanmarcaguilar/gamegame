@@ -58,8 +58,8 @@ function CertificateArtwork({ title, issuer }: { title: string; issuer: string }
           <stop offset="100%" stopColor="var(--color-art-bg-to)" />
         </linearGradient>
         <linearGradient id="cert-glow" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#60A5FA" stopOpacity="0.3" />
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#E2E8F0" stopOpacity="0.3" />
         </linearGradient>
         <pattern id="cert-grid" width="20" height="20" patternUnits="userSpaceOnUse">
           <path
@@ -82,7 +82,7 @@ function CertificateArtwork({ title, issuer }: { title: string; issuer: string }
           x="0"
           y="6"
           textAnchor="middle"
-          fill="#60A5FA"
+          fill="#FFFFFF"
           fontFamily="Space Grotesk"
           fontSize="16"
           fontWeight="700"

@@ -11,9 +11,9 @@ export function Experience() {
         {/* Section Header */}
         <div className="flex flex-col items-center text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
-              <span className="text-[11px] font-bold tracking-[0.2em] text-blue-500 uppercase">Experience</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-3.5 py-1 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+              <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+              <span className="text-[11px] font-bold tracking-[0.2em] text-white uppercase">Experience</span>
             </div>
           </motion.div>
 
@@ -24,7 +24,7 @@ export function Experience() {
             viewport={{ once: true }}
             className="font-display text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl text-balance"
           >
-            Where I&apos;ve <span className="text-blue-500">been</span>
+            Where I&apos;ve <span className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]">been</span>
           </motion.h2>
 
           <motion.p

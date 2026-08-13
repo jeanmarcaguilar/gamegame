@@ -37,8 +37,8 @@ export default {
       },
       boxShadow: {
         soft: '0 4px 24px -8px var(--color-shadow-soft)',
-        glow: '0 0 30px rgba(59, 130, 246, 0.25)',
-        'glow-strong': '0 0 60px rgba(59, 130, 246, 0.35)',
+        glow: '0 0 30px rgba(255, 255, 255, 0.35)',
+        'glow-strong': '0 0 60px rgba(255, 255, 255, 0.5)',
         card: '0 8px 32px -8px var(--color-shadow-card)',
       },
       backdropBlur: {
@@ -75,8 +75,8 @@ export default {
           '50%': { transform: 'translateY(-12px)' },
         },
         glow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(59,130,246,0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(59,130,246,0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(255,255,255,0.4)' },
+          '50%': { boxShadow: '0 0 45px rgba(255,255,255,0.8)' },
         },
         borderSpin: {
           to: { transform: 'rotate(360deg)' },

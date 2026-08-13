@@ -4,7 +4,6 @@ import { FaRegCalendarCheck, FaCubes, FaGraduationCap, FaShoppingCart, FaCar, Fa
 import { FiArrowRight } from 'react-icons/fi';
 import type { Project } from '@/constants/projects';
 import { cn } from '@/utils/cn';
-import { IconType } from 'react-icons';
 
 interface ProjectCardProps {
   project: Project;
@@ -14,64 +13,32 @@ interface ProjectCardProps {
 
 // Map project ID to a specific theme matching the design
 function getThemeInfo(id: string) {
+  const baseWhite = {
+    color: 'white',
+    borderColor: 'border-white/20',
+    hoverBorder: 'group-hover:border-white/60',
+    glow: 'shadow-[0_0_20px_rgba(255,255,255,0.1)]',
+    hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]',
+    bgGlow: 'bg-white/10',
+    iconColor: 'text-white',
+    iconBg: 'bg-white/15',
+    ringColor: 'border-white/30',
+    textColor: 'text-white',
+  };
+
   switch (id) {
     case 'smart-campus-attendance':
-      return {
-        color: 'blue',
-        borderColor: 'border-blue-500/30',
-        hoverBorder: 'group-hover:border-blue-400/60',
-        glow: 'shadow-[0_0_20px_rgba(59,130,246,0.15)]',
-        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]',
-        bgGlow: 'bg-blue-500/10',
-        icon: FaRegCalendarCheck,
-        iconColor: 'text-blue-400',
-        iconBg: 'bg-blue-500/20',
-        ringColor: 'border-blue-500/30',
-        textColor: 'text-blue-400',
-      };
+      return { ...baseWhite, icon: FaRegCalendarCheck };
     case 'blockchain-ecommerce':
-      return {
-        color: 'purple',
-        borderColor: 'border-purple-500/30',
-        hoverBorder: 'group-hover:border-purple-400/60',
-        glow: 'shadow-[0_0_20px_rgba(168,85,247,0.15)]',
-        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]',
-        bgGlow: 'bg-purple-500/10',
-        icon: FaCubes,
-        iconColor: 'text-purple-400',
-        iconBg: 'bg-purple-500/20',
-        ringColor: 'border-purple-500/30',
-        textColor: 'text-purple-400',
-      };
+      return { ...baseWhite, icon: FaCubes };
     case 'loan-management':
-      return {
-        color: 'teal',
-        borderColor: 'border-teal-500/30',
-        hoverBorder: 'group-hover:border-teal-400/60',
-        glow: 'shadow-[0_0_20px_rgba(20,184,166,0.15)]',
-        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(20,184,166,0.3)]',
-        bgGlow: 'bg-teal-500/10',
-        icon: FaGraduationCap,
-        iconColor: 'text-teal-400',
-        iconBg: 'bg-teal-500/20',
-        ringColor: 'border-teal-500/30',
-        textColor: 'text-teal-400',
-      };
+      return { ...baseWhite, icon: FaGraduationCap };
     case 'parking-management':
     case 'portfolio-website':
     default:
       return {
-        color: 'yellow',
-        borderColor: 'border-yellow-500/30',
-        hoverBorder: 'group-hover:border-yellow-400/60',
-        glow: 'shadow-[0_0_20px_rgba(234,179,8,0.15)]',
-        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(234,179,8,0.3)]',
-        bgGlow: 'bg-yellow-500/10',
+        ...baseWhite,
         icon: id === 'parking-management' ? FaCar : id === 'portfolio-website' ? FaCode : FaShoppingCart,
-        iconColor: 'text-yellow-400',
-        iconBg: 'bg-yellow-500/20',
-        ringColor: 'border-yellow-500/30',
-        textColor: 'text-yellow-400',
       };
   }
 }

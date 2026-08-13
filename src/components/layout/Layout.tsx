@@ -18,7 +18,7 @@ export default function Layout({ children }: LayoutProps) {
         Skip to content
       </a>
       <Navbar />
-      <main id="main" className="relative">
+      <main id="main" className="relative pb-28">
         {children}
       </main>
       <Footer />

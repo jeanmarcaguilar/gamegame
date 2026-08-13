@@ -8,57 +8,54 @@
    defaults when the `dark` class is present on <html>.
 ----------------------------------------------------------- */
 :root {
-  /* Surface */
-  --color-bg: #FFFFFF;             /* page background (white) */
-  --color-bg-secondary: #F8FAFC;   /* alt section background (soft slate) */
-  --color-card: #FFFFFF;           /* card / surface (white) */
-  --color-border: rgba(15, 23, 42, 0.08); /* slate-900 @ 8% */
-  --color-border-strong: rgba(15, 23, 42, 0.12);
+  /* Surface — Modern Obsidian Black theme */
+  --color-bg: #050505;             /* page background (pure modern black) */
+  --color-bg-secondary: #0D0D10;   /* alt section background (deep charcoal) */
+  --color-card: #0F0F12;           /* card / surface */
+  --color-border: rgba(255, 255, 255, 0.12); /* sleek white border @ 12% */
+  --color-border-strong: rgba(255, 255, 255, 0.25);
 
-  /* Brand */
-  --color-primary: #2563EB;        /* blue-600 — slightly punchier on white */
-  --color-accent: #3B82F6;         /* blue-500 */
-  --color-primary-soft: rgba(37, 99, 235, 0.10);
-  --color-primary-fg: #FFFFFF;     /* foreground on bg-primary (white in both
-                                      themes — needed as a variable so the
-                                      universal `*` transition can fade it) */
+  /* Brand — Modern Black & Glowing White */
+  --color-primary: #FFFFFF;        /* glowing white primary */
+  --color-accent: #FFFFFF;         /* glowing white accent */
+  --color-primary-soft: rgba(255, 255, 255, 0.12);
+  --color-primary-fg: #000000;     /* text on primary button */
 
-  /* Status — used by ErrorBoundary indicator + future error states.
-     Variable-backed so a theme flip cross-fades instead of snapping. */
-  --color-status-warn: #F59E0B;    /* amber-500 — soft warning glow on light */
-  --color-status-err:  #F43F5E;    /* rose-500  — readable on light cards */
+  /* Status */
+  --color-status-warn: #F59E0B;
+  --color-status-err:  #F43F5E;
 
   /* Text */
-  --color-text: #0F172A;           /* slate-900 */
-  --color-muted: #475569;          /* slate-600 */
-  --color-success: #059669;        /* emerald-600 (AA on white) */
+  --color-text: #F8FAFC;           /* crisp white text */
+  --color-muted: #A1A1AA;          /* zinc-400 */
+  --color-success: #10B981;
 
   /* Decorative */
-  --color-grid: rgba(15, 23, 42, 0.05);
-  --color-overlay-soft: rgba(15, 23, 42, 0.03);
-  --color-overlay-medium: rgba(15, 23, 42, 0.06);
-  --color-shadow-card: rgba(15, 23, 42, 0.08);
-  --color-shadow-soft: rgba(15, 23, 42, 0.06);
-  --color-glass: rgba(255, 255, 255, 0.65);
-  --color-glass-soft: rgba(15, 23, 42, 0.03);
-  --color-glow-soft: rgba(37, 99, 235, 0.30);
-  --color-radial-glow: rgba(59, 130, 246, 0.10);
+  --color-grid: rgba(255, 255, 255, 0.05);
+  --color-overlay-soft: rgba(255, 255, 255, 0.03);
+  --color-overlay-medium: rgba(255, 255, 255, 0.07);
+  --color-shadow-card: rgba(0, 0, 0, 0.7);
+  --color-shadow-soft: rgba(0, 0, 0, 0.5);
+  --color-glass: rgba(18, 18, 22, 0.75);
+  --color-glass-soft: rgba(255, 255, 255, 0.04);
+  --color-glow-soft: rgba(255, 255, 255, 0.45);
+  --color-radial-glow: rgba(255, 255, 255, 0.15);
 
   /* SVG artwork */
-  --color-art-bg-from: #F8FAFC;
-  --color-art-bg-to: #F1F5F9;
-  --color-art-grid: rgba(15, 23, 42, 0.04);
-  --color-art-stroke: rgba(15, 23, 42, 0.06);
-  --color-art-text: #0F172A;
-  --color-art-text-muted: #475569;
-  --color-art-fg: rgba(15, 23, 42, 0.03);
-  --color-art-fg-strong: rgba(15, 23, 42, 0.05);
+  --color-art-bg-from: #121215;
+  --color-art-bg-to: #050505;
+  --color-art-grid: rgba(255, 255, 255, 0.05);
+  --color-art-stroke: rgba(255, 255, 255, 0.12);
+  --color-art-text: #FFFFFF;
+  --color-art-text-muted: #A1A1AA;
+  --color-art-fg: rgba(255, 255, 255, 0.05);
+  --color-art-fg-strong: rgba(255, 255, 255, 0.1);
 
   /* Scrollbar */
-  --color-scrollbar-track: #FFFFFF;
-  --color-scrollbar-thumb: #E2E8F0;
-  --color-scrollbar-thumb-hover: #CBD5E1;
-  --color-scrollbar-border: #FFFFFF;
+  --color-scrollbar-track: #050505;
+  --color-scrollbar-thumb: #1F1F24;
+  --color-scrollbar-thumb-hover: #3F3F46;
+  --color-scrollbar-border: #050505;
 
   /* Type & easing */
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -69,62 +66,62 @@
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Soft section-tint gradient (used by .section-tint) */
-  --color-tint-from: rgba(96, 165, 250, 0.10);
-  --color-tint-via: rgba(167, 139, 250, 0.06);
-  --color-tint-to: rgba(52, 211, 153, 0.05);
+  --color-tint-from: rgba(255, 255, 255, 0.05);
+  --color-tint-via: rgba(255, 255, 255, 0.02);
+  --color-tint-to: rgba(255, 255, 255, 0.01);
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /* -----------------------------------------------------------
    Dark mode — additive via `<html class="dark">`.
 ----------------------------------------------------------- */
 html.dark {
-  --color-bg: #0B1220;
-  --color-bg-secondary: #0F172A;
-  --color-card: #111827;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-bg: #030303;
+  --color-bg-secondary: #0A0A0C;
+  --color-card: #0D0D10;
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-strong: rgba(255, 255, 255, 0.28);
 
-  --color-primary: #3B82F6;
-  --color-accent: #60A5FA;
-  --color-primary-soft: rgba(59, 130, 246, 0.12);
-  --color-primary-fg: #FFFFFF;
+  --color-primary: #FFFFFF;
+  --color-accent: #FFFFFF;
+  --color-primary-soft: rgba(255, 255, 255, 0.16);
+  --color-primary-fg: #000000;
 
-  --color-status-warn: #FBBF24;    /* amber-400 — stays luminous on dark */
-  --color-status-err:  #FB7185;    /* rose-400 — softer on dark */
+  --color-status-warn: #FBBF24;
+  --color-status-err:  #FB7185;
 
-  --color-text: #F8FAFC;
-  --color-muted: #94A3B8;
+  --color-text: #FFFFFF;
+  --color-muted: #A1A1AA;
   --color-success: #10B981;
 
-  --color-grid: rgba(255, 255, 255, 0.04);
-  --color-overlay-soft: rgba(255, 255, 255, 0.03);
-  --color-overlay-medium: rgba(255, 255, 255, 0.06);
-  --color-shadow-card: rgba(0, 0, 0, 0.5);
-  --color-shadow-soft: rgba(0, 0, 0, 0.4);
-  --color-glass: rgba(17, 24, 39, 0.55);
-  --color-glass-soft: rgba(255, 255, 255, 0.03);
-  --color-glow-soft: rgba(96, 165, 250, 0.55);
-  --color-radial-glow: rgba(59, 130, 246, 0.18);
+  --color-grid: rgba(255, 255, 255, 0.05);
+  --color-overlay-soft: rgba(255, 255, 255, 0.04);
+  --color-overlay-medium: rgba(255, 255, 255, 0.08);
+  --color-shadow-card: rgba(0, 0, 0, 0.85);
+  --color-shadow-soft: rgba(0, 0, 0, 0.6);
+  --color-glass: rgba(14, 14, 18, 0.8);
+  --color-glass-soft: rgba(255, 255, 255, 0.05);
+  --color-glow-soft: rgba(255, 255, 255, 0.55);
+  --color-radial-glow: rgba(255, 255, 255, 0.2);
 
-  --color-art-bg-from: #1E293B;
-  --color-art-bg-to: #0F172A;
-  --color-art-grid: rgba(255, 255, 255, 0.05);
-  --color-art-stroke: rgba(255, 255, 255, 0.08);
-  --color-art-text: #F8FAFC;
-  --color-art-text-muted: #94A3B8;
-  --color-art-fg: rgba(255, 255, 255, 0.04);
-  --color-art-fg-strong: rgba(255, 255, 255, 0.07);
+  --color-art-bg-from: #16161B;
+  --color-art-bg-to: #030303;
+  --color-art-grid: rgba(255, 255, 255, 0.06);
+  --color-art-stroke: rgba(255, 255, 255, 0.14);
+  --color-art-text: #FFFFFF;
+  --color-art-text-muted: #A1A1AA;
+  --color-art-fg: rgba(255, 255, 255, 0.06);
+  --color-art-fg-strong: rgba(255, 255, 255, 0.12);
 
-  --color-scrollbar-track: #0F172A;
-  --color-scrollbar-thumb: #1E293B;
-  --color-scrollbar-thumb-hover: #334155;
-  --color-scrollbar-border: #0F172A;
+  --color-scrollbar-track: #030303;
+  --color-scrollbar-thumb: #18181B;
+  --color-scrollbar-thumb-hover: #27272A;
+  --color-scrollbar-border: #030303;
 
-  --color-tint-from: rgba(59, 130, 246, 0.10);
-  --color-tint-via: rgba(139, 92, 246, 0.08);
-  --color-tint-to: rgba(16, 185, 129, 0.06);
+  --color-tint-from: rgba(255, 255, 255, 0.06);
+  --color-tint-via: rgba(255, 255, 255, 0.03);
+  --color-tint-to: rgba(255, 255, 255, 0.01);
 
   color-scheme: dark;
 }
@@ -154,8 +151,6 @@ body {
   transition: background-color 0.3s var(--ease-out-soft),
               color 0.3s var(--ease-out-soft);
   min-height: 100vh;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
 }
 
 /* -----------------------------------------------------------
@@ -280,18 +275,20 @@ body::before {
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%);
+    background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 50%, #A1A1AA 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
   }
   html.dark .gradient-text {
-    background: linear-gradient(135deg, #93C5FD 0%, #60A5FA 50%, #3B82F6 100%);
+    background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 50%, #CBD5E1 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
   }
 
   .gradient-border {
@@ -328,7 +325,7 @@ body::before {
   }
   .glow-on-hover:hover {
     box-shadow: 0 0 0 1px var(--color-glow-soft),
-                0 0 30px -5px rgba(59, 130, 246, 0.35),
+                0 0 35px -5px rgba(255, 255, 255, 0.45),
                 0 12px 32px -8px var(--color-shadow-card);
     transform: translateY(-4px);
     border-color: var(--color-glow-soft);
@@ -364,7 +361,8 @@ body::before {
     bottom: -2px;
     height: 2px;
     width: 100%;
-    background: linear-gradient(90deg, #3B82F6, #60A5FA);
+    background: linear-gradient(90deg, #FFFFFF, rgba(255, 255, 255, 0.4));
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.5s var(--ease-out-soft);

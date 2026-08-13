@@ -3,20 +3,20 @@ import { useEffect, useState } from 'react';
 import { getIcon } from '@/utils/icons';
 
 const codeLines = [
-  { text: 'const', color: 'text-pink-500' },
-  { text: ' developer = {', color: 'text-[#0066ff] dark:text-[#58a6ff]' },
-  { text: '\n  name: ', color: 'text-gray-600 dark:text-gray-300' },
-  { text: '"Jean Marc Aguilar"', color: 'text-emerald-500 dark:text-emerald-400' },
-  { text: ',\n  role: ', color: 'text-gray-600 dark:text-gray-300' },
-  { text: '"Full Stack Developer"', color: 'text-emerald-500 dark:text-emerald-400' },
-  { text: ',\n  skills: [', color: 'text-gray-600 dark:text-gray-300' },
-  { text: '\n    "React", "TypeScript", "Node.js"', color: 'text-amber-500 dark:text-amber-300' },
-  { text: '\n    "Next.js", "Tailwind CSS", "Python"', color: 'text-amber-500 dark:text-amber-300' },
-  { text: '\n  ],\n  passion: ', color: 'text-gray-600 dark:text-gray-300' },
-  { text: '"Building stunning web apps"', color: 'text-emerald-500 dark:text-emerald-400' },
-  { text: ',\n  status: ', color: 'text-gray-600 dark:text-gray-300' },
-  { text: '"Available for hire"', color: 'text-emerald-500 dark:text-emerald-400' },
-  { text: '\n};', color: 'text-[#0066ff] dark:text-[#58a6ff]' },
+  { text: 'const', color: 'text-zinc-400 font-bold' },
+  { text: ' developer = {', color: 'text-white font-bold drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' },
+  { text: '\n  name: ', color: 'text-zinc-400' },
+  { text: '"Jean Marc Aguilar"', color: 'text-emerald-400' },
+  { text: ',\n  role: ', color: 'text-zinc-400' },
+  { text: '"Full Stack Developer"', color: 'text-emerald-400' },
+  { text: ',\n  skills: [', color: 'text-zinc-400' },
+  { text: '\n    "React", "TypeScript", "Node.js"', color: 'text-amber-300' },
+  { text: '\n    "Next.js", "Tailwind CSS", "Python"', color: 'text-amber-300' },
+  { text: '\n  ],\n  passion: ', color: 'text-zinc-400' },
+  { text: '"Building stunning web apps"', color: 'text-emerald-400' },
+  { text: ',\n  status: ', color: 'text-zinc-400' },
+  { text: '"Available for hire"', color: 'text-emerald-400' },
+  { text: '\n};', color: 'text-white font-bold drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' },
 ];
 
 export function HeroAvatar() {
@@ -36,17 +36,17 @@ export function HeroAvatar() {
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-              className="absolute w-[400px] h-[400px] bg-gradient-to-tr from-blue-500/20 to-purple-500/20 dark:from-blue-600/30 dark:to-purple-600/30 rounded-[40%] blur-[80px]"
+              className="absolute w-[400px] h-[400px] bg-gradient-to-tr from-white/10 via-white/5 to-transparent rounded-[40%] blur-[90px]"
             />
             <motion.div
               animate={{ y: [-20, 20, -20], x: [-10, 10, -10] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-10 right-10 w-32 h-32 bg-blue-400/30 dark:bg-blue-500/40 rounded-full blur-[50px]"
+              className="absolute top-10 right-10 w-32 h-32 bg-white/15 rounded-full blur-[50px]"
             />
             <motion.div
               animate={{ y: [20, -20, 20], x: [10, -10, 10] }}
               transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-10 left-10 w-40 h-40 bg-purple-400/20 dark:bg-purple-500/30 rounded-full blur-[60px]"
+              className="absolute bottom-10 left-10 w-40 h-40 bg-white/10 rounded-full blur-[60px]"
             />
           </>
         )}
@@ -58,16 +58,16 @@ export function HeroAvatar() {
         animate={{ opacity: 1, y: 0, rotateX: 0, rotateY: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         style={{ transformPerspective: 1000 }}
-        className="relative w-full max-w-[480px] overflow-hidden rounded-2xl border border-blue-500/10 dark:border-white/10 bg-white/60 dark:bg-[#0f172a]/70 backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,102,255,0.08)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]"
+        className="relative w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/20 bg-[#09090C]/90 backdrop-blur-2xl shadow-[0_0_30px_0_rgba(255,255,255,0.12)]"
       >
         {/* Window Header */}
-        <div className="flex items-center gap-2 border-b border-blue-500/10 dark:border-white/10 bg-blue-50/50 dark:bg-black/20 px-4 py-3">
+        <div className="flex items-center gap-2 border-b border-white/10 bg-black/40 px-4 py-3">
           <div className="flex gap-1.5">
             <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
             <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
             <div className="h-3 w-3 rounded-full bg-[#27c93f]" />
           </div>
-          <div className="flex-1 text-center font-mono text-xs font-medium text-gray-500 dark:text-gray-400">
+          <div className="flex-1 text-center font-mono text-xs font-medium text-gray-400">
             developer.ts
           </div>
         </div>
@@ -103,7 +103,7 @@ export function HeroAvatar() {
               <motion.span
                 animate={{ opacity: [1, 0] }}
                 transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-2.5 h-4 sm:h-4 ml-1 -mb-0.5 bg-[#0066ff] dark:bg-[#58a6ff]"
+                className="inline-block w-2.5 h-4 sm:h-4 ml-1 -mb-0.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]"
               />
             </motion.div>
           )}

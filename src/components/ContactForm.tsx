@@ -80,11 +80,11 @@ export function ContactForm() {
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       noValidate
-      className="relative overflow-hidden rounded-3xl bg-[#080b14] border-t border-blue-500/40 border-l border-r border-b border-white/5 p-6 sm:p-8 lg:p-10 shadow-[0_-10px_30px_rgba(59,130,246,0.1)]"
+      className="relative overflow-hidden rounded-3xl bg-[#09090C] border-t border-white/40 border-l border-r border-b border-white/10 p-6 sm:p-8 lg:p-10 shadow-[0_0_35px_rgba(255,255,255,0.08)]"
     >
       {/* Top right intense glow */}
-      <div className="absolute top-0 right-10 w-[30%] h-[2px] bg-blue-400 shadow-[0_0_20px_5px_rgba(96,165,250,0.8)]" />
-      <div className="absolute top-[-50px] right-[-50px] w-[200px] h-[200px] rounded-full bg-blue-500/20 blur-[60px] pointer-events-none" />
+      <div className="absolute top-0 right-10 w-[35%] h-[2px] bg-white shadow-[0_0_20px_5px_rgba(255,255,255,0.9)]" />
+      <div className="absolute top-[-50px] right-[-50px] w-[200px] h-[200px] rounded-full bg-white/10 blur-[60px] pointer-events-none" />
 
       <div className="relative z-10 grid gap-6 sm:grid-cols-2">
         <Field
@@ -132,21 +132,21 @@ export function ContactForm() {
       </div>
 
       <div className="relative z-10 mt-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
-        <p className="flex items-center gap-2 text-xs text-gray-500">
-          <FaShieldAlt className="text-blue-500/70" />
+        <p className="flex items-center gap-2 text-xs text-gray-400">
+          <FaShieldAlt className="text-white/70" />
           By submitting, you agree to be contacted by email.
         </p>
         <button
           type="submit"
           disabled={status === 'sending'}
           className={cn(
-            'group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-300',
-            'hover:bg-blue-500 hover:shadow-blue-500/40 active:scale-[0.98]',
+            'group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-bold text-black shadow-[0_0_20px_rgba(255,255,255,0.35)] transition-all duration-300',
+            'hover:bg-neutral-200 hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] active:scale-[0.98]',
             'disabled:opacity-60 disabled:cursor-not-allowed',
           )}
         >
           {status === 'sending' ? (
-            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/70 border-t-transparent" />
+            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-black/70 border-t-transparent" />
           ) : (
             <FaPaperPlane className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           )}
@@ -203,18 +203,18 @@ function Field({
 
   return (
     <label htmlFor={id} className="block">
-      <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-blue-500">
+      <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-white">
         {label}
       </span>
       <div
         className={cn(
-          'group relative flex rounded-xl border border-white/5 bg-[#0a0f1c] transition-all duration-300 overflow-hidden',
-          'focus-within:border-blue-500/40 focus-within:shadow-[0_0_15px_rgba(59,130,246,0.15)] focus-within:bg-[#0c1222]',
+          'group relative flex rounded-xl border border-white/10 bg-[#050508] transition-all duration-300 overflow-hidden',
+          'focus-within:border-white/50 focus-within:shadow-[0_0_20px_rgba(255,255,255,0.2)] focus-within:bg-[#0c0c10]',
           error && 'border-red-500/40 focus-within:border-red-500/60',
         )}
       >
         {Icon && (
-          <div className="flex shrink-0 w-12 items-start justify-center pt-4 text-blue-500/50 group-focus-within:text-blue-500 transition-colors">
+          <div className="flex shrink-0 w-12 items-start justify-center pt-4 text-white/50 group-focus-within:text-white transition-colors">
             <Icon className="h-4 w-4" />
           </div>
         )}

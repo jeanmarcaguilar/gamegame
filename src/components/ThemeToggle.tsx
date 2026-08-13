@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/utils/cn';
@@ -10,37 +11,52 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const [theme, , toggle] = useTheme();
   const isDark = theme === 'dark';
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={toggle}
-      data-theme-toggle
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.96 }}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-      aria-pressed={isDark}
-      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
       className={cn(
-        'group relative flex h-9 w-[72px] shrink-0 items-center rounded-full',
-        'border border-white/10 bg-[#0a0f1c] px-1',
-        'transition-colors duration-500',
-        className,
+        "relative flex items-center justify-center h-[36px] px-6 rounded-[40px]",
+        "bg-white/[0.04] hover:bg-white/[0.06] border border-white/5 cursor-pointer transition-colors duration-150",
+        "text-white focus:outline-none focus:ring-1 focus:ring-white/20",
+        className
       )}
     >
-      <div className="relative flex w-full items-center justify-between z-10 px-1">
-        <FaSun className={cn("h-3.5 w-3.5 transition-colors duration-300", !isDark ? "text-white" : "text-gray-500")} />
-        <FaMoon className={cn("h-3.5 w-3.5 transition-colors duration-300", isDark ? "text-white" : "text-gray-500")} />
+      <div className="relative w-[16px] h-[16px] flex items-center justify-center shrink-0">
+        <AnimatePresence mode="popLayout" initial={false}>
+          {!isHovered ? (
+            <motion.div
+              key="icon1"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 600, damping: 25 }}
+              className="absolute inset-0 flex items-center justify-center text-white"
+            >
+              <FaMoon className="w-4 h-4" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="icon2"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 600, damping: 25 }}
+              className="absolute inset-0 flex items-center justify-center text-white"
+            >
+              <FaSun className="w-4 h-4" />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Sliding thumb */}
-      <motion.span
-        layout
-        initial={false}
-        animate={{
-          x: isDark ? 32 : 0,
-        }}
-        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-        className="absolute left-1 z-0 h-7 w-7 rounded-full bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]"
-      />
-    </button>
+      <span className="font-medium tracking-tight text-[10px]"></span>
+    </motion.button>
   );
 }

@@ -44,11 +44,11 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center bg-[#ffffff] dark:bg-[var(--color-bg)] transition-colors duration-500"
+      className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center bg-[var(--color-bg)] transition-colors duration-500"
     >
       {/* Light subtle grid background matching reference */}
       <div className="absolute inset-0 pointer-events-none z-0" style={{ 
-        backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(0,100,255,0.06) 1px, transparent 0)', 
+        backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.08) 1px, transparent 0)', 
         backgroundSize: '40px 40px' 
       }}></div>
 
@@ -64,7 +64,7 @@ export function Hero() {
           {/* Eyebrow */}
           <motion.p
             variants={fadeUp}
-            className="font-display text-sm font-bold uppercase tracking-[0.2em] text-[#0066ff] dark:text-[#58a6ff] mb-2"
+            className="font-display text-sm font-bold uppercase tracking-[0.2em] text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] mb-2"
           >
             HELLO, I'M
           </motion.p>
@@ -72,32 +72,32 @@ export function Hero() {
           {/* Hero Name */}
           <motion.h1
             variants={fadeUp}
-            className="font-display text-5xl font-black leading-[1.1] tracking-tight text-[#111827] dark:text-white sm:text-6xl md:text-7xl lg:text-[5rem]"
+            className="font-display text-5xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[5rem]"
           >
             {firstName} <br />
-            <span className="text-[#0066ff] dark:text-[#58a6ff]">{lastName}</span>
+            <span className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.7)]">{lastName}</span>
           </motion.h1>
 
           {/* Subtitle */}
           <motion.div
             variants={fadeUp}
-            className="mt-6 font-display text-[15px] font-medium text-gray-500 dark:text-gray-400 sm:text-base"
+            className="mt-6 font-display text-[15px] font-medium text-gray-300 sm:text-base"
           >
-            IT Graduate | Web Developer <span className="mx-1">•</span> Aspiring Full Stack Developer
+            IT Graduate | Web Developer <span className="mx-1 text-white/60">•</span> Aspiring Full Stack Developer
           </motion.div>
 
           {/* Typing Role */}
           <motion.div
             variants={fadeUp}
-            className="mt-4 flex items-center gap-2 font-display text-lg text-gray-500 dark:text-gray-400 sm:text-xl"
+            className="mt-4 flex items-center gap-2 font-display text-lg text-gray-300 sm:text-xl"
             aria-live="polite"
           >
             <span>I'm a</span>
-            <span className="relative inline-flex items-center font-semibold text-[#0066ff] dark:text-[#58a6ff]">
+            <span className="relative inline-flex items-center font-semibold text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]">
               {typed}
               <span
                 aria-hidden
-                className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse bg-[#0066ff] dark:bg-[#58a6ff]"
+                className="ml-1 inline-block h-[1.1em] w-[2px] animate-pulse bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]"
               />
             </span>
           </motion.div>
@@ -105,7 +105,7 @@ export function Hero() {
           {/* Bio */}
           <motion.p
             variants={fadeUp}
-            className="mt-6 max-w-[480px] text-sm leading-relaxed text-gray-500 dark:text-gray-400 sm:text-[15px] text-pretty"
+            className="mt-6 max-w-[480px] text-sm leading-relaxed text-gray-400 sm:text-[15px] text-pretty"
           >
             Building modern, reliable, and user-focused web applications. I specialize in full-stack development, enjoy solving real-world problems through technology, and continuously improve my skills to build clean, scalable, and maintainable software.
           </motion.p>
@@ -121,7 +121,7 @@ export function Hero() {
               size="lg"
               icon={<FaDownload className="h-3.5 w-3.5" />}
               external
-              className="bg-[#0066ff] hover:bg-[#0052cc] text-white border-none shadow-[0_8px_20px_-6px_rgba(0,102,255,0.4)] rounded-xl py-3 px-6"
+              className="bg-white hover:bg-neutral-200 text-black border-none shadow-[0_0_25px_rgba(255,255,255,0.4)] rounded-xl py-3 px-6 font-bold"
             >
               Download Resume
             </LinkButton>
@@ -130,7 +130,7 @@ export function Hero() {
               variant="outline"
               size="lg"
               icon={<FaFolderOpen className="h-3.5 w-3.5" />}
-              className="bg-white dark:bg-[#1f2937] text-gray-800 dark:text-gray-200 border-none shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] rounded-xl py-3 px-6 hover:bg-gray-50"
+              className="bg-[#121215] text-gray-200 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.5)] rounded-xl py-3 px-6 hover:bg-white/10 hover:border-white/30"
             >
               View Projects
             </LinkButton>
@@ -139,7 +139,7 @@ export function Hero() {
               variant="outline"
               size="lg"
               icon={<FaPaperPlane className="h-3.5 w-3.5" />}
-              className="bg-white dark:bg-[#1f2937] text-gray-800 dark:text-gray-200 border-none shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)] rounded-xl py-3 px-6 hover:bg-gray-50"
+              className="bg-[#121215] text-gray-200 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.5)] rounded-xl py-3 px-6 hover:bg-white/10 hover:border-white/30"
             >
               Contact Me
             </LinkButton>
