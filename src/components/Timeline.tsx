@@ -1,14 +1,63 @@
 import { motion } from 'framer-motion';
-import { FaBriefcase, FaLaptopCode, FaGraduationCap, FaTrophy } from 'react-icons/fa';
+import { FaCode, FaBriefcase, FaGraduationCap, FaTrophy } from 'react-icons/fa6';
 import type { ExperienceEntry } from '@/constants/experience';
-import { cn } from '@/utils/cn';
 
-const iconMap = {
+const iconMap: Record<string, any> = {
   Internship: FaBriefcase,
-  Freelance: FaLaptopCode,
+  Freelance: FaCode,
   Academic: FaGraduationCap,
   Achievement: FaTrophy,
 };
+
+function getThemeInfo(type: string) {
+  switch (type) {
+    case 'Freelance':
+      return {
+        color: 'blue',
+        borderColor: 'border-blue-500/30',
+        hoverBorder: 'group-hover:border-blue-400/50',
+        bg: 'bg-blue-500/10',
+        iconBg: 'bg-blue-500/20',
+        textColor: 'text-blue-400',
+        dotColor: 'bg-blue-500',
+        glow: 'shadow-[0_0_10px_currentColor]',
+      };
+    case 'Internship':
+      return {
+        color: 'teal',
+        borderColor: 'border-teal-500/30',
+        hoverBorder: 'group-hover:border-teal-400/50',
+        bg: 'bg-teal-500/10',
+        iconBg: 'bg-teal-500/20',
+        textColor: 'text-teal-400',
+        dotColor: 'bg-teal-500',
+        glow: 'shadow-[0_0_10px_currentColor]',
+      };
+    case 'Academic':
+      return {
+        color: 'purple',
+        borderColor: 'border-purple-500/30',
+        hoverBorder: 'group-hover:border-purple-400/50',
+        bg: 'bg-purple-500/10',
+        iconBg: 'bg-purple-500/20',
+        textColor: 'text-purple-400',
+        dotColor: 'bg-purple-500',
+        glow: 'shadow-[0_0_10px_currentColor]',
+      };
+    case 'Achievement':
+    default:
+      return {
+        color: 'yellow',
+        borderColor: 'border-yellow-500/30',
+        hoverBorder: 'group-hover:border-yellow-400/50',
+        bg: 'bg-yellow-500/10',
+        iconBg: 'bg-yellow-500/20',
+        textColor: 'text-yellow-400',
+        dotColor: 'bg-yellow-500',
+        glow: 'shadow-[0_0_10px_currentColor]',
+      };
+  }
+}
 
 interface TimelineItemProps {
   entry: ExperienceEntry;
@@ -17,60 +66,77 @@ interface TimelineItemProps {
 
 export function TimelineItem({ entry, index }: TimelineItemProps) {
   const Icon = iconMap[entry.type] ?? FaBriefcase;
-  const isLeft = index % 2 === 0;
+  const theme = getThemeInfo(entry.type);
 
   return (
     <motion.li
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        'relative grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12',
-      )}
+      transition={{ duration: 0.6, delay: Math.min(index * 0.1, 0.4), ease: [0.22, 1, 0.36, 1] }}
+      className="relative flex w-full group"
     >
-      {/* Period — left on desktop */}
-      <div className={cn('md:order-1 md:text-right', isLeft ? 'md:pr-10' : 'md:order-2 md:pl-10 md:text-left')}>
-        <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass-soft)] px-3 py-1 text-xs font-medium text-text-muted">
-          {entry.period}
-        </span>
+      {/* Left: Date Pill & Connector */}
+      <div className="flex w-[100px] md:w-[160px] shrink-0 pt-5 pr-4 justify-end relative">
+        <div className="relative flex items-center justify-end w-full">
+          <span className="relative z-10 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 md:px-4 md:py-2 text-[10px] md:text-xs font-medium text-gray-300 backdrop-blur-sm whitespace-nowrap">
+            {entry.period}
+          </span>
+          {/* Horizontal line connector */}
+          <div className="absolute right-[-1.5rem] top-1/2 h-px w-6 bg-white/10 -z-0" />
+        </div>
       </div>
 
-      {/* Content */}
-      <div className={cn('md:order-2', isLeft ? 'md:pl-10' : 'md:order-1 md:pr-10 md:text-right')}>
-        <div className="gradient-border relative rounded-2xl p-6 sm:p-7">
-          <div className={cn('flex items-center gap-3', !isLeft && 'md:flex-row-reverse')}>
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary-soft)] text-primary-accent ring-1 ring-inset ring-primary/20">
-              <Icon className="h-4 w-4" />
+      {/* Middle: Vertical line overlap & Dot */}
+      <div className="relative flex flex-col items-center mt-[1.65rem] shrink-0 w-px">
+        <div className={`relative z-20 h-2.5 w-2.5 md:h-3 md:w-3 -ml-[1px] rounded-full ${theme.dotColor} ${theme.textColor} ${theme.glow} ring-4 ring-[#080b14] transition-transform duration-300 group-hover:scale-125`} />
+      </div>
+
+      {/* Right: Themed Card */}
+      <div className="ml-6 md:ml-10 flex-1">
+        <div className={`relative overflow-hidden rounded-2xl bg-[#0a0f1c] border ${theme.borderColor} ${theme.hoverBorder} p-6 md:p-8 transition-colors duration-500`}>
+          
+          {/* Ambient background glow inside the card */}
+          <div className={`absolute -right-20 -top-20 h-64 w-64 rounded-full blur-[80px] opacity-20 pointer-events-none ${theme.bg}`} />
+          {/* Subtle dot pattern background on the right */}
+          <div className="absolute right-0 top-0 bottom-0 w-32 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
+
+          <div className="relative z-10 flex items-start gap-4 md:gap-5">
+            {/* Icon Box */}
+            <div className={`flex shrink-0 h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl ${theme.iconBg} border ${theme.borderColor} ${theme.textColor}`}>
+              <Icon className="h-5 w-5 md:h-6 md:w-6" />
             </div>
-            <div className={cn('min-w-0', !isLeft && 'md:text-right')}>
-              <span className="text-xs uppercase tracking-[0.16em] text-primary-accent">{entry.type}</span>
-              <h3 className="font-display text-lg font-semibold leading-tight text-text">
+
+            {/* Header Text */}
+            <div className="flex-1 min-w-0 pt-0.5">
+              <span className={`text-[10px] md:text-xs font-bold uppercase tracking-wider ${theme.textColor}`}>
+                {entry.type === 'Academic' ? 'Academic Projects' : entry.type}
+              </span>
+              <h3 className="mt-1 font-display text-lg md:text-xl font-bold leading-tight text-white">
                 {entry.title}
               </h3>
-              <p className="text-sm text-text-muted">{entry.organization}</p>
+              <p className="mt-1 text-xs md:text-sm text-gray-400">
+                {entry.organization}
+              </p>
             </div>
           </div>
 
-          <p className={cn('mt-4 text-sm leading-relaxed text-text-muted', !isLeft && 'md:text-left')}>
-            {entry.description}
-          </p>
+          <div className="relative z-10 mt-6 border-t border-white/5 pt-5">
+            <p className="text-sm leading-relaxed text-gray-300">
+              {entry.description}
+            </p>
 
-          {entry.highlights && entry.highlights.length > 0 && (
-            <ul
-              className={cn(
-                'mt-4 space-y-2 text-sm text-text-muted',
-                !isLeft && 'md:text-left',
-              )}
-            >
-              {entry.highlights.map((h) => (
-                <li key={h} className="flex items-start gap-2">
-                  <span className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                  <span>{h}</span>
-                </li>
-              ))}
-            </ul>
-          )}
+            {entry.highlights && entry.highlights.length > 0 && (
+              <ul className="mt-4 space-y-2.5">
+                {entry.highlights.map((h) => (
+                  <li key={h} className="flex items-start gap-3 text-xs md:text-sm text-gray-400 leading-relaxed">
+                    <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${theme.dotColor}`} />
+                    <span>{h}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </motion.li>

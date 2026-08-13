@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaRegCalendarCheck, FaCubes, FaGraduationCap, FaShoppingCart, FaCar, FaCode } from 'react-icons/fa';
+import { FiArrowRight } from 'react-icons/fi';
 import type { Project } from '@/constants/projects';
 import { cn } from '@/utils/cn';
+import { IconType } from 'react-icons';
 
 interface ProjectCardProps {
   project: Project;
@@ -9,7 +12,73 @@ interface ProjectCardProps {
   index?: number;
 }
 
+// Map project ID to a specific theme matching the design
+function getThemeInfo(id: string) {
+  switch (id) {
+    case 'smart-campus-attendance':
+      return {
+        color: 'blue',
+        borderColor: 'border-blue-500/30',
+        hoverBorder: 'group-hover:border-blue-400/60',
+        glow: 'shadow-[0_0_20px_rgba(59,130,246,0.15)]',
+        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]',
+        bgGlow: 'bg-blue-500/10',
+        icon: FaRegCalendarCheck,
+        iconColor: 'text-blue-400',
+        iconBg: 'bg-blue-500/20',
+        ringColor: 'border-blue-500/30',
+        textColor: 'text-blue-400',
+      };
+    case 'blockchain-ecommerce':
+      return {
+        color: 'purple',
+        borderColor: 'border-purple-500/30',
+        hoverBorder: 'group-hover:border-purple-400/60',
+        glow: 'shadow-[0_0_20px_rgba(168,85,247,0.15)]',
+        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]',
+        bgGlow: 'bg-purple-500/10',
+        icon: FaCubes,
+        iconColor: 'text-purple-400',
+        iconBg: 'bg-purple-500/20',
+        ringColor: 'border-purple-500/30',
+        textColor: 'text-purple-400',
+      };
+    case 'loan-management':
+      return {
+        color: 'teal',
+        borderColor: 'border-teal-500/30',
+        hoverBorder: 'group-hover:border-teal-400/60',
+        glow: 'shadow-[0_0_20px_rgba(20,184,166,0.15)]',
+        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(20,184,166,0.3)]',
+        bgGlow: 'bg-teal-500/10',
+        icon: FaGraduationCap,
+        iconColor: 'text-teal-400',
+        iconBg: 'bg-teal-500/20',
+        ringColor: 'border-teal-500/30',
+        textColor: 'text-teal-400',
+      };
+    case 'parking-management':
+    case 'portfolio-website':
+    default:
+      return {
+        color: 'yellow',
+        borderColor: 'border-yellow-500/30',
+        hoverBorder: 'group-hover:border-yellow-400/60',
+        glow: 'shadow-[0_0_20px_rgba(234,179,8,0.15)]',
+        hoverGlow: 'group-hover:shadow-[0_0_30px_rgba(234,179,8,0.3)]',
+        bgGlow: 'bg-yellow-500/10',
+        icon: id === 'parking-management' ? FaCar : id === 'portfolio-website' ? FaCode : FaShoppingCart,
+        iconColor: 'text-yellow-400',
+        iconBg: 'bg-yellow-500/20',
+        ringColor: 'border-yellow-500/30',
+        textColor: 'text-yellow-400',
+      };
+  }
+}
+
 export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
+  const theme = getThemeInfo(project.id);
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 22 }}
@@ -32,61 +101,61 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
       tabIndex={0}
       aria-label={`Open ${project.title} details`}
       className={cn(
-        'group relative cursor-pointer overflow-hidden rounded-3xl glass text-left',
-        'transition-shadow duration-500 hover:shadow-card glow-on-hover',
+        'group relative cursor-pointer overflow-hidden rounded-3xl bg-[#080b14] border',
+        'transition-all duration-500 text-left',
+        theme.borderColor,
+        theme.hoverBorder,
+        theme.glow,
+        theme.hoverGlow
       )}
     >
-      {/* Image / Preview */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden bg-bg-secondary">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"
-        />
-        <ProjectArtwork id={project.id} />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--color-card)] to-transparent" />
-        {project.badge && (
-          <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-bg)]/70 px-2.5 py-1 text-xs font-medium text-text-muted backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-success" />
-            {project.badge}
-          </span>
-        )}
+      {/* Graphic Area */}
+      <div className="relative aspect-[2/1] w-full overflow-hidden bg-[#0a0f1c]">
+        {/* Background ambient glow */}
+        <div className={`absolute top-1/2 left-1/4 -translate-y-1/2 w-[80%] h-[150%] rounded-[100%] blur-[80px] opacity-30 ${theme.bgGlow}`} />
+        
+        {/* Mock UI Composition */}
+        <MockUIGraphic theme={theme} badge={project.badge} />
+        
+        {/* Fade to bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#080b14] to-transparent" />
       </div>
 
       {/* Body */}
-      <div className="p-6 sm:p-7">
-        <h3 className="font-display text-xl font-semibold tracking-tight text-text sm:text-2xl">
+      <div className="p-5 relative z-10">
+        <h3 className="font-display text-lg font-bold tracking-tight text-white sm:text-xl">
           {project.title}
         </h3>
-        <p className="mt-2 text-[15px] leading-relaxed text-text-muted text-pretty">
+        <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-gray-400 text-pretty font-medium">
           {project.shortDescription}
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {project.techStack.slice(0, 4).map((tech) => (
             <span
               key={tech}
-              className="rounded-full border border-[var(--color-border)] bg-[var(--color-glass-soft)] px-2.5 py-1 text-xs text-text-muted"
+              className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] sm:text-xs font-medium text-gray-300 backdrop-blur-sm"
             >
               {tech}
             </span>
           ))}
           {project.techStack.length > 4 && (
-            <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-glass-soft)] px-2.5 py-1 text-xs text-text-muted">
+            <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] sm:text-xs font-medium text-gray-300 backdrop-blur-sm">
               +{project.techStack.length - 4}
             </span>
           )}
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-3">
+        <div className="mt-5 flex flex-wrap items-center gap-3">
           {project.github && (
             <a
               href={project.github}
               target="_blank"
               rel="noreferrer noopener"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-glass-soft)] px-3.5 py-2 text-sm text-text-muted transition-all duration-300 hover:border-primary/40 hover:text-text"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 transition-all duration-300 hover:bg-white/10 hover:text-white"
             >
-              <FaGithub className="h-4 w-4" />
+              <FaGithub className="h-3.5 w-3.5" />
               GitHub
             </a>
           )}
@@ -96,15 +165,15 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
               target="_blank"
               rel="noreferrer noopener"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-2 text-sm text-primary-accent transition-all duration-300 hover:bg-primary/20"
+              className={`inline-flex items-center gap-1.5 rounded-full border ${theme.borderColor} ${theme.bgGlow} px-3 py-1.5 text-xs sm:text-sm font-medium ${theme.textColor} transition-all duration-300 hover:brightness-125`}
             >
-              <FaExternalLinkAlt className="h-3.5 w-3.5" />
+              <FaExternalLinkAlt className="h-3 w-3" />
               Live Demo
             </a>
           )}
-          <span className="ml-auto inline-flex items-center gap-1.5 text-sm text-text-muted transition-colors duration-300 group-hover:text-primary-accent">
+          <span className={`ml-auto inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-300 ${theme.textColor} group-hover:brightness-125`}>
             View details
-            <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
           </span>
         </div>
       </div>
@@ -113,90 +182,73 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
 }
 
 /**
- * SVG-based abstract artwork used in lieu of project screenshots.
- * Each project gets a unique geometric composition matching its theme.
- *
- * Theme-aware: background, grid, and neutral fills come from CSS variables
- * so the artwork looks correct in both light and dark mode without
- * duplicating the SVG.
+ * A composite component that renders the abstract UI seen in the design.
  */
-function ProjectArtwork({ id }: { id: string }) {
-  const palettes: Record<string, [string, string, string]> = {
-    'smart-campus-attendance': ['#3B82F6', '#60A5FA', '#93C5FD'],
-    'blockchain-ecommerce': ['#8B5CF6', '#60A5FA', '#A78BFA'],
-    'parking-management': ['#10B981', '#34D399', '#60A5FA'],
-    'loan-management': ['#F59E0B', '#FBBF24', '#60A5FA'],
-    'portfolio-website': ['#60A5FA', '#3B82F6', '#2563EB'],
-  };
-  const [a, b, c] = palettes[id] ?? ['#3B82F6', '#60A5FA', '#93C5FD'];
+function MockUIGraphic({ theme, badge }: { theme: any, badge?: string }) {
+  const Icon = theme.icon;
 
   return (
-    <svg
-      viewBox="0 0 800 450"
-      className="h-full w-full"
-      preserveAspectRatio="xMidYMid slice"
-      role="img"
-      aria-label={`${id} artwork`}
-    >
-      <defs>
-        <linearGradient id={`bg-${id}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="var(--color-art-bg-from)" />
-          <stop offset="100%" stopColor="var(--color-art-bg-to)" />
-        </linearGradient>
-        <linearGradient id={`g1-${id}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor={a} stopOpacity="0.9" />
-          <stop offset="100%" stopColor={b} stopOpacity="0.55" />
-        </linearGradient>
-        <linearGradient id={`g2-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={c} stopOpacity="0.55" />
-          <stop offset="100%" stopColor={b} stopOpacity="0" />
-        </linearGradient>
-        <pattern id={`grid-${id}`} width="40" height="40" patternUnits="userSpaceOnUse">
-          <path
-            d="M 40 0 L 0 0 0 40"
-            fill="none"
-            stroke="var(--color-art-grid)"
-            strokeWidth="1"
-          />
-        </pattern>
-      </defs>
+    <div className="absolute inset-0 p-4 sm:p-6 flex items-center justify-between">
+      {/* Top Left Badge */}
+      {badge && (
+        <div className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-gray-300 z-20">
+          <span className="h-1.5 w-1.5 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.8)]" />
+          {badge}
+        </div>
+      )}
 
-      <rect width="800" height="450" fill={`url(#bg-${id})`} />
-      <rect width="800" height="450" fill={`url(#grid-${id})`} />
+      {/* Main Glowing Icon Area (Left) */}
+      <div className="relative flex items-center justify-center w-[45%] h-full ml-2 sm:ml-4">
+        {/* Concentric rings */}
+        <div className={`absolute w-24 h-24 sm:w-32 sm:h-32 rounded-full border ${theme.ringColor} opacity-50`} />
+        <div className={`absolute w-36 h-36 sm:w-48 sm:h-48 rounded-full border ${theme.ringColor} opacity-20`} />
+        
+        {/* Core Icon */}
+        <div className={`relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full ${theme.iconBg} border ${theme.ringColor} shadow-[0_0_20px_currentColor] ${theme.textColor}`}>
+          <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
+        </div>
+      </div>
 
-      {/* Floating geometry */}
-      <circle cx="160" cy="120" r="80" fill={`url(#g1-${id})`} opacity="0.7" />
-      <circle cx="640" cy="320" r="120" fill={`url(#g2-${id})`} opacity="0.6" />
-      <rect
-        x="380"
-        y="80"
-        width="220"
-        height="160"
-        rx="20"
-        fill="var(--color-art-fg)"
-        stroke="var(--color-art-stroke)"
-        strokeWidth="1"
-        transform="rotate(-6 490 160)"
-      />
-      <rect
-        x="120"
-        y="280"
-        width="180"
-        height="120"
-        rx="16"
-        fill="var(--color-art-fg-strong)"
-        stroke="var(--color-art-stroke)"
-        strokeWidth="1"
-        transform="rotate(4 210 340)"
-      />
-      {/* Code-line accents */}
-      <g opacity="0.55">
-        <rect x="420" y="110" width="120" height="6" rx="3" fill={a} />
-        <rect x="420" y="130" width="80" height="6" rx="3" fill={c} />
-        <rect x="420" y="150" width="140" height="6" rx="3" fill={b} />
-        <rect x="420" y="170" width="60" height="6" rx="3" fill={a} />
-        <rect x="420" y="190" width="100" height="6" rx="3" fill={c} />
-      </g>
-    </svg>
+      {/* Mock Dashboard Area (Right) */}
+      <div className="relative w-[50%] h-[70%] bg-black/40 border border-white/5 rounded-xl p-4 flex flex-col justify-between backdrop-blur-md shadow-2xl mr-2 overflow-hidden">
+        {/* Top Header Mock */}
+        <div className="flex items-center justify-between">
+          <div className="h-2 w-16 bg-gray-500/50 rounded-full" />
+          <div className="h-2 w-8 bg-gray-600/30 rounded-full" />
+        </div>
+
+        {/* Middle Stats Mock */}
+        <div className="flex gap-3 items-end mt-4">
+          <div className={`w-12 h-12 rounded-full border-[3px] ${theme.borderColor} flex items-center justify-center ${theme.textColor} font-bold text-[10px]`}>
+            92%
+          </div>
+          <div className="flex-1 flex items-end gap-1.5 h-12">
+            {[40, 70, 45, 90, 60].map((height, i) => (
+              <div 
+                key={i} 
+                className={`w-full rounded-t-sm ${i === 3 ? theme.iconBg.replace('20', '80') : 'bg-gray-600/30'}`} 
+                style={{ height: `${height}%` }} 
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom List Mock */}
+        <div className="mt-4 space-y-2">
+          {[1, 2].map((i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`h-2 w-2 rounded-full ${i === 1 ? theme.bgGlow.replace('10', '100') : 'bg-red-500'}`} />
+                <div className="h-1.5 w-12 bg-gray-500/40 rounded-full" />
+              </div>
+              <div className="h-1.5 w-6 bg-gray-600/40 rounded-full" />
+            </div>
+          ))}
+        </div>
+
+        {/* Subtle overlay gradient to match the glossy feel */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none rounded-xl" />
+      </div>
+    </div>
   );
 }

@@ -1,108 +1,147 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { SectionTitle } from '@/components/SectionTitle';
 import { StatCard } from '@/components/StatCard';
 import { Avatar } from '@/components/Avatar';
-import { personalInfo, stats } from '@/constants/personal';
+import { stats } from '@/constants/personal';
 import { fadeUp, staggerContainer } from '@/animations/variants';
+import { IoSchoolOutline } from 'react-icons/io5';
+import { GoGoal } from 'react-icons/go';
+import { FaCode, FaHeart } from 'react-icons/fa6';
+import { IconType } from 'react-icons';
 
 export function About() {
   return (
-    <section id="about" className="relative min-h-screen py-12 sm:py-16 lg:py-20 scroll-mt-24 sm:scroll-mt-28 flex flex-col items-center justify-center">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 -mt-24 sm:-mt-40 lg:-mt-48">
-        <SectionTitle
-          eyebrow="About"
-          title="A bit about me"
-        />
-
-        <div className="mt-6 grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
-          {/* Photo — compact, side-by-side on lg+ */}
+    <section id="about" className="relative min-h-screen py-16 sm:py-24 scroll-mt-24 sm:scroll-mt-28 flex flex-col items-center justify-center overflow-hidden">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-12">
+          
+          {/* Left Side: Photo with Glowing Effects */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="lg:col-span-4"
+            className="relative lg:col-span-5 flex justify-center"
           >
-            <div className="relative mx-auto w-full max-w-xs lg:max-w-none">
-              <FlippableProfileCard />
-              <div className="absolute -inset-x-2 bottom-3 mx-auto flex w-fit justify-center">
-                <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-bg)]/70 px-3 py-1 text-xs text-text-muted backdrop-blur">
-                  IT Graduate · Class of 2026
-                </span>
+            {/* Background concentric glowing circles */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[500px] aspect-square pointer-events-none">
+              <div className="absolute inset-0 rounded-full border border-blue-500/10 scale-[1.2]" />
+              <div className="absolute inset-8 rounded-full border border-blue-500/20 scale-[1.1]" />
+              <div className="absolute inset-16 rounded-full border border-blue-400/30 shadow-[0_0_40px_rgba(59,130,246,0.15)]" />
+              {/* Glowing dot on the right side of circles */}
+              <div className="absolute top-1/2 right-4 h-2 w-2 -translate-y-1/2 rounded-full bg-blue-400 shadow-[0_0_10px_3px_rgba(96,165,250,0.8)]" />
+            </div>
+
+            {/* Profile Card Container */}
+            <div className="relative z-10 w-full max-w-[320px] rounded-3xl p-[1px] bg-gradient-to-b from-blue-400/80 to-blue-600/30 shadow-[0_0_30px_rgba(59,130,246,0.25)]">
+              <div className="relative rounded-[23px] overflow-hidden bg-[#0A0A0A]">
+                <FlippableProfileCard />
+                
+                {/* Floating Badge */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[85%]">
+                  <div className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-black/40 p-3 backdrop-blur-md shadow-lg">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/20 text-blue-400">
+                      <IoSchoolOutline size={14} />
+                    </div>
+                    <span className="text-xs font-medium text-gray-200">
+                      IT Graduate · Class of 2026
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Bio — fills the rest, single column of tight cards */}
+          {/* Right Side: Bio and Cards */}
           <motion.div
             variants={staggerContainer(0.08, 0.05)}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="lg:col-span-8"
+            className="lg:col-span-7"
           >
-            <motion.h3
+            <motion.div variants={fadeUp} className="mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1">
+                <div className="h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
+                <span className="text-[11px] font-bold tracking-[0.2em] text-blue-500 uppercase">About</span>
+              </div>
+            </motion.div>
+
+            <motion.h2
               variants={fadeUp}
-              className="font-display text-xl font-bold leading-tight tracking-tight text-text sm:text-2xl lg:text-3xl text-balance"
+              className="font-display text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl text-balance"
             >
-              {personalInfo.tagline}
-            </motion.h3>
+              A bit <span className="text-blue-500">about me</span>
+            </motion.h2>
 
             <motion.p
               variants={fadeUp}
-              className="mt-2 text-sm leading-relaxed text-text-muted sm:text-base text-pretty font-medium"
+              className="mt-4 text-lg sm:text-xl leading-relaxed text-gray-300 font-medium"
             >
-              Building Modern, Reliable, and User-Focused Web Applications.
+              Building clean, modern, and user-focused<br className="hidden sm:block" /> web experiences.
             </motion.p>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-2 text-sm leading-relaxed text-text-muted sm:text-base text-pretty"
-            >
-              I&apos;m an Information Technology graduate with a strong foundation in web
-              development and a passion for creating clean, responsive, and user-friendly
-              applications. I enjoy turning ideas into practical digital solutions by
-              combining intuitive front-end design with reliable back-end development.
-            </motion.p>
+            <div className="mt-8 space-y-4 text-sm sm:text-[15px] leading-relaxed text-gray-400/90 text-pretty">
+              <motion.p variants={fadeUp}>
+                I&apos;m an Information Technology graduate with a strong foundation in web
+                development and a passion for creating clean, responsive, and user-friendly
+                applications. I enjoy turning ideas into practical digital solutions by
+                combining intuitive front-end design with reliable back-end development.
+              </motion.p>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-2 text-sm leading-relaxed text-text-muted sm:text-base text-pretty"
-            >
-              My experience includes working with modern web technologies such as HTML, CSS,
-              JavaScript, React, PHP, MySQL, and RESTful APIs. Through academic projects and
-              continuous self-learning, I&apos;ve developed a solid understanding of full-stack
-              development, software design principles, and writing clean, maintainable code.
-            </motion.p>
+              <motion.p variants={fadeUp}>
+                My experience includes working with modern technologies such as HTML, CSS,
+                JavaScript, React, PHP, MySQL, and RESTful APIs. Through academic projects and
+                continuous self-learning, I&apos;ve developed a solid understanding of full-stack
+                development, software design principles, and writing clean, maintainable code.
+              </motion.p>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-2 text-sm leading-relaxed text-text-muted sm:text-base text-pretty"
-            >
-              As I begin my professional career, I&apos;m committed to continuously improving my
-              technical skills, learning new technologies, and contributing to meaningful
-              projects that create real value. My goal is to grow as a Full-Stack Developer
-              while building software that is scalable, efficient, and delivers an excellent
-              user experience.
-            </motion.p>
+              <motion.p variants={fadeUp}>
+                As I begin my professional career, I&apos;m committed to continuously improving my
+                technical skills, learning new technologies, and contributing to meaningful
+                projects that create real value. My goal is to grow as a Full-Stack Developer
+                while building software that is scalable, efficient, and delivers an excellent
+                user experience.
+              </motion.p>
+            </div>
 
+            {/* Details Cards */}
             <motion.div
               variants={fadeUp}
-              className="mt-4 grid gap-3 sm:grid-cols-2"
+              className="mt-10 grid gap-4 sm:grid-cols-2"
             >
-              <Detail label="Education" body="BS Information Technology — 2022 to present" />
-              <Detail label="Career goal" body="Junior Full Stack role, then product engineering" />
-              <Detail label="Currently learning" body="TypeScript, distributed systems, Web3" />
-              <Detail label="Passions" body="Clean architecture, mentorship, side projects" />
+              <DetailCard 
+                icon={IoSchoolOutline} 
+                label="Education" 
+                body="BS Information Technology\n2022 to present" 
+              />
+              <DetailCard 
+                icon={GoGoal} 
+                label="Career Goal" 
+                body="Junior Full Stack role,\nthen product engineering" 
+                iconColor="text-indigo-400"
+                iconBg="bg-indigo-500/20"
+              />
+              <DetailCard 
+                icon={FaCode} 
+                label="Currently Learning" 
+                body="TypeScript, distributed\nsystems, Web3" 
+              />
+              <DetailCard 
+                icon={FaHeart} 
+                label="Passions" 
+                body="Clean architecture, mentorship,\nside projects" 
+                iconColor="text-pink-400"
+                iconBg="bg-pink-500/20"
+              />
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Stats — always rendered, nothing to jump to here. */}
+        {/* Stats — optionally hidden or placed elsewhere depending on exact design. We'll keep them below for now. */}
         <div
           id="about-stats"
-          className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4"
+          className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4 hidden"
         >
           {stats.map((s, i) => (
             <StatCard key={s.label} {...s} delay={i} />
@@ -113,11 +152,24 @@ export function About() {
   );
 }
 
-function Detail({ label, body }: { label: string; body: string }) {
+interface DetailCardProps {
+  icon: IconType;
+  label: string;
+  body: string;
+  iconColor?: string;
+  iconBg?: string;
+}
+
+function DetailCard({ icon: Icon, label, body, iconColor = "text-blue-500", iconBg = "bg-blue-500/10" }: DetailCardProps) {
   return (
-    <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-glass-soft)] p-3.5">
-      <div className="text-[10px] uppercase tracking-[0.16em] text-primary-accent">{label}</div>
-      <p className="mt-0.5 text-sm text-text">{body}</p>
+    <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-[#0a1020]/50 p-4 shadow-lg backdrop-blur-sm transition-colors hover:bg-[#0a1020]/80 hover:border-white/10">
+      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${iconBg} ${iconColor}`}>
+        <Icon size={20} />
+      </div>
+      <div>
+        <div className="text-[10px] font-bold uppercase tracking-wider text-blue-500 mb-1">{label}</div>
+        <p className="text-[13px] leading-snug text-gray-300 whitespace-pre-line">{body}</p>
+      </div>
     </div>
   );
 }
@@ -127,7 +179,6 @@ function FlippableProfileCard() {
   const reduceMotion = useReducedMotion();
 
   // Smooth 3D flip — spring dampens the snap so it eases into rest.
-  // Respects prefers-reduced-motion by snapping to the end state.
   const flipTransition = reduceMotion
     ? { duration: 0 }
     : { type: 'spring' as const, stiffness: 70, damping: 18, mass: 0.9 };
@@ -136,7 +187,6 @@ function FlippableProfileCard() {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      // Click toggles for touch users; keyboard (Enter/Space) toggles too.
       onClick={() => setHovered((h) => !h)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -148,10 +198,10 @@ function FlippableProfileCard() {
       tabIndex={0}
       aria-label={hovered ? 'Show profile picture' : 'Show animated avatar'}
       aria-pressed={hovered}
-      className="block w-full cursor-pointer rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+      className="block w-full cursor-pointer focus:outline-none"
     >
       <div
-        className="gradient-border overflow-hidden rounded-3xl p-[2px]"
+        className="overflow-hidden"
         style={{ perspective: '1200px' }}
       >
         <motion.div
@@ -160,9 +210,9 @@ function FlippableProfileCard() {
           animate={{ rotateY: hovered ? 180 : 0 }}
           transition={flipTransition}
         >
-          {/* Front face — static profile picture (default) */}
+          {/* Front face */}
           <div
-            className="aspect-[4/5] w-full overflow-hidden rounded-[22px] bg-bg-secondary"
+            className="aspect-[3/4] w-full overflow-hidden bg-bg-secondary"
             style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
           >
             <img
@@ -172,11 +222,13 @@ function FlippableProfileCard() {
               loading="lazy"
               draggable={false}
             />
+            {/* Dark gradient overlay at the bottom for the badge to pop */}
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
           </div>
 
-          {/* Back face — animated avatar (revealed on hover) */}
+          {/* Back face */}
           <div
-            className="absolute inset-0 overflow-hidden rounded-[22px] bg-bg-secondary"
+            className="absolute inset-0 overflow-hidden bg-bg-secondary"
             style={{
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
