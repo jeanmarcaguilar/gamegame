@@ -1,9 +1,18 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export function LoadingScreen() {
   const text = 'For with God nothing shall be impossible." — Luke 1:37';
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [cursorIndex, setCursorIndex] = useState(0);
+  
+  // Animate cursor position along with typing
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCursorIndex(prev => Math.min(prev + 1, text.length));
+    }, 30);
+    return () => clearInterval(interval);
+  }, [text.length]);
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -185,18 +194,18 @@ export function LoadingScreen() {
       {/* StarBurst background canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 w-full h-full"
       />
       
-      <div className="relative z-10 w-full max-w-md px-6">
-        <div className="bg-[#0a0f1c] border border-white/20 text-white font-mono text-[10px] p-3 rounded-md w-full h-16 flex flex-col justify-end overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+      <div className="relative z-10 w-full max-w-md px-4 sm:px-6">
+        <div className="bg-[#0a0f1c] border border-white/20 text-white font-mono text-[10px] sm:text-[10px] p-3 rounded-md w-full h-16 flex flex-col justify-end overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.1)] mx-auto">
           <div className="flex text-gray-400 mb-1 leading-none">
             <span>$</span>
             <span className="ml-2">loading...</span>
           </div>
           <div className="flex items-center leading-none">
             <span className="text-emerald-400">&gt;</span>
-            <div className="ml-2 flex">
+            <div className="ml-2 flex relative">
               {text.split('').map((char, index) => (
                 <motion.span
                   key={index}
@@ -208,12 +217,19 @@ export function LoadingScreen() {
                   {char}
                 </motion.span>
               ))}
+              {/* Single cursor that follows the typing */}
+              <motion.span
+                className="w-1.5 h-2.5 bg-white block"
+                animate={{ 
+                  opacity: [1, 0, 1],
+                  x: cursorIndex * 6 // Move cursor along with typing
+                }}
+                transition={{ 
+                  opacity: { duration: 0.8, repeat: Infinity, ease: "linear" },
+                  x: { duration: 0.03 }
+                }}
+              />
             </div>
-            <motion.span
-              className="ml-2 w-1.5 h-2.5 bg-white block"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-            />
           </div>
         </div>
       </div>
