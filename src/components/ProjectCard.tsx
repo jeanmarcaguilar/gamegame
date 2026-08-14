@@ -77,7 +77,7 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
       )}
     >
       {/* Graphic Area */}
-      <div className="relative aspect-[2/1] w-full overflow-hidden bg-[#0a0f1c]">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#0a0f1c]">
         {/* Background ambient glow */}
         <div className={`absolute top-1/2 left-1/4 -translate-y-1/2 w-[80%] h-[150%] rounded-[100%] blur-[80px] opacity-30 ${theme.bgGlow}`} />
 
@@ -89,40 +89,40 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
       </div>
 
       {/* Body */}
-      <div className="p-5 relative z-10">
-        <h3 className="font-display text-lg font-bold tracking-tight text-white sm:text-xl">
+      <div className="p-4 relative z-10">
+        <h3 className="font-display text-base font-bold tracking-tight text-white sm:text-lg">
           {project.title}
         </h3>
-        <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-gray-400 text-pretty font-medium">
+        <p className="mt-1 text-[11px] sm:text-xs leading-relaxed text-gray-400 text-pretty font-medium">
           {project.shortDescription}
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-1.5">
+        <div className="mt-3 flex flex-wrap gap-1">
           {project.techStack.slice(0, 4).map((tech) => (
             <span
               key={tech}
-              className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] sm:text-xs font-medium text-gray-300 backdrop-blur-sm"
+              className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-gray-300 backdrop-blur-sm"
             >
               {tech}
             </span>
           ))}
           {project.techStack.length > 4 && (
-            <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-0.5 text-[10px] sm:text-xs font-medium text-gray-300 backdrop-blur-sm">
+            <span className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-gray-300 backdrop-blur-sm">
               +{project.techStack.length - 4}
             </span>
           )}
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center gap-3">
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           {project.github && (
             <a
               href={project.github}
               target="_blank"
               rel="noreferrer noopener"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 transition-all duration-300 hover:bg-white/10 hover:text-white"
+              className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] sm:text-xs font-medium text-gray-300 transition-all duration-300 hover:bg-white/10 hover:text-white"
             >
-              <FaGithub className="h-3.5 w-3.5" />
+              <FaGithub className="h-3 w-3" />
               GitHub
             </a>
           )}
@@ -132,13 +132,13 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
               target="_blank"
               rel="noreferrer noopener"
               onClick={(e) => e.stopPropagation()}
-              className={`inline-flex items-center gap-1.5 rounded-full border ${theme.borderColor} ${theme.bgGlow} px-3 py-1.5 text-xs sm:text-sm font-medium ${theme.textColor} transition-all duration-300 hover:brightness-125`}
+              className={`inline-flex items-center gap-1 rounded-full border ${theme.borderColor} ${theme.bgGlow} px-2.5 py-1 text-[10px] sm:text-xs font-medium ${theme.textColor} transition-all duration-300 hover:brightness-125`}
             >
-              <FaExternalLinkAlt className="h-3 w-3" />
+              <FaExternalLinkAlt className="h-2.5 w-2.5" />
               Live Demo
             </a>
           )}
-          <span className={`ml-auto inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-300 ${theme.textColor} group-hover:brightness-125`}>
+          <span className={`ml-auto inline-flex items-center gap-1 text-[10px] sm:text-xs font-semibold transition-colors duration-300 ${theme.textColor} group-hover:brightness-125`}>
             View details
             <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
           </span>

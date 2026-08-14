@@ -5,6 +5,7 @@ import { ProjectModal } from '@/components/ProjectModal';
 import { projects } from '@/constants/projects';
 import type { Project } from '@/constants/projects';
 import { fadeUp } from '@/animations/variants';
+import Spline from '@splinetool/react-spline';
 
 export function Projects() {
   const [openProject, setOpenProject] = useState<Project | null>(null);
@@ -14,18 +15,32 @@ export function Projects() {
   const displayProjects = projects.slice(0, 4);
 
   return (
-    <section id="projects" className="relative py-24 sm:py-28 lg:py-36 overflow-hidden">
-      {/* Background Orbits */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[400px] pointer-events-none opacity-40">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[200px] rounded-[100%] border-t border-white/20 shadow-[0_-10px_30px_rgba(255,255,255,0.15)]" />
-        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[600px] h-[150px] rounded-[100%] border-t border-white/30" />
-        {/* Glowing dots on orbits */}
-        <div className="absolute top-[21%] left-[30%] h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_10px_2px_rgba(255,255,255,0.9)]" />
-        <div className="absolute top-[28%] right-[35%] h-2 w-2 rounded-full bg-white shadow-[0_0_12px_3px_rgba(255,255,255,0.9)]" />
+    <section id="projects" className="relative overflow-hidden min-h-screen py-24 sm:py-28 lg:py-36">
+      {/* Spline 3D Background — oversized canvas cropped to hide watermark corner */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div
+          className="absolute flex items-center justify-center"
+          style={{
+            top: '-2%',
+            left: '-2%',
+            width: '106%',
+            height: '112%',
+          }}
+        >
+          <Spline
+            scene="https://prod.spline.design/1svVMR5yatbXHB32/scene.splinecode"
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: 1,
+              transform: 'scale(1.3)',
+            }}
+          />
+        </div>
       </div>
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Section Header */}
         <div className="flex flex-col items-center text-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-6">

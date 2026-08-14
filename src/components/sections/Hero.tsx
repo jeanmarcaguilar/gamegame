@@ -19,6 +19,60 @@ export function Hero() {
   const typed = useTypingEffect(typingRoles);
   const orbRef = useRef<HTMLDivElement>(null);
   const imageBoxRef = useRef<HTMLDivElement>(null);
+  const splineRef = useRef<any>(null);
+
+  // Track mouse position for cursor interaction
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!splineRef.current) return;
+
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      
+      // Calculate distance from center (0 to 1)
+      const distanceX = Math.abs(e.clientX - centerX) / centerX;
+      const distanceY = Math.abs(e.clientY - centerY) / centerY;
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+      // Send cursor position to Spline scene
+      try {
+        if (splineRef.current && splineRef.current.setVariable) {
+          splineRef.current.setVariable('cursorDistance', distance);
+          splineRef.current.setVariable('cursorX', e.clientX / window.innerWidth);
+          splineRef.current.setVariable('cursorY', e.clientY / window.innerHeight);
+        }
+      } catch (error) {
+        // Silently handle if variables aren't set up in Spline scene
+      }
+    };
+
+    const handleLoad = () => {
+      // Initialize with center position
+      if (splineRef.current && splineRef.current.setVariable) {
+        try {
+          splineRef.current.setVariable('cursorDistance', 0);
+          splineRef.current.setVariable('cursorX', 0.5);
+          splineRef.current.setVariable('cursorY', 0.5);
+        } catch (error) {
+          // Silently handle if variables aren't set up
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    // Set up load event
+    if (splineRef.current) {
+      splineRef.current.addEventListener('load', handleLoad);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (splineRef.current) {
+        splineRef.current.removeEventListener('load', handleLoad);
+      }
+    };
+  }, []);
 
   // Subtle GSAP parallax
   useEffect(() => {
@@ -27,12 +81,12 @@ export function Hero() {
     const ctx = gsap.context(() => {
       gsap.to(el, {
         yPercent: -8,
-        ease: 'none',
+        ease: 'power3.inOut',
         scrollTrigger: {
           trigger: '#home',
           start: 'top top',
           end: 'bottom top',
-          scrub: true,
+          scrub: 2.5,
         },
       });
     }, el);
@@ -46,12 +100,12 @@ export function Hero() {
     const ctx = gsap.context(() => {
       gsap.to(el, {
         opacity: 0,
-        ease: 'none',
+        ease: 'power3.inOut',
         scrollTrigger: {
           trigger: '#home',
           start: 'bottom top',
           end: 'bottom top-=200',
-          scrub: true,
+          scrub: 2.5,
         },
       });
     }, el);
@@ -65,10 +119,22 @@ export function Hero() {
     >
       {/* Spline 3D background — pointer events ENABLED so the cursor interaction works */}
       <div ref={imageBoxRef} className="absolute inset-0 z-[5] h-screen">
-        <Spline
-          scene="https://prod.spline.design/si0FoV7XZ1XjbCzK/scene.splinecode"
-          style={{ width: '100%', height: '100%' }}
-        />
+        <div ref={orbRef} className="h-full w-full">
+          <Spline
+            ref={splineRef}
+            scene="https://prod.spline.design/si0FoV7XZ1XjbCzK/scene.splinecode"
+            style={{ width: '100%', height: '100%', opacity: 1 }}
+          />
+        </div>
+        {/* Hide Spline footer */}
+        <style>{`
+          div[class*="spline"] > div:last-child {
+            display: none !important;
+          }
+          a[href*="spline.design"] {
+            display: none !important;
+          }
+        `}</style>
         {/* Gradient fade at bottom to blend into next section */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent pointer-events-none" />
       </div>
