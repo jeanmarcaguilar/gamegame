@@ -13,6 +13,7 @@ import { useTypingEffect } from '@/hooks/useTypingEffect';
 import { personalInfo, typingRoles } from '@/constants/personal';
 import { fadeUp, staggerContainer } from '@/animations/variants';
 import TypewriterText from '@/components/TypewriterText';
+import ImageBox from '@/components/ImageBox';
 
 export function Hero() {
   const typed = useTypingEffect(typingRoles);
@@ -40,13 +41,21 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center bg-[var(--color-bg)] transition-colors duration-500"
+      className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center transition-colors duration-500"
     >
-      {/* Light subtle grid background matching reference */}
-      <div className="absolute inset-0 pointer-events-none z-0" style={{ 
-        backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.08) 1px, transparent 0)', 
-        backgroundSize: '40px 40px' 
-      }}></div>
+      {/* ImageBox background */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <ImageBox 
+          background="#0a0a0f"
+          lineColor="#ffffff"
+          lineOpacity={0}
+          grid={3}
+          speed={30}
+          boost={50}
+          fade={60}
+          label={false}
+        />
+      </div>
 
       <div className="relative z-10 mx-auto grid max-w-[1400px] w-full grid-cols-1 items-center gap-12 px-6 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:px-12">
         

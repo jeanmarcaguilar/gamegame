@@ -2,21 +2,119 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { getIcon } from '@/utils/icons';
 
-const codeLines = [
-  { text: 'const', color: 'text-zinc-400 font-bold' },
-  { text: ' developer = {', color: 'text-white font-bold drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' },
-  { text: '\n  name: ', color: 'text-zinc-400' },
-  { text: '"Jean Marc Aguilar"', color: 'text-emerald-400' },
-  { text: ',\n  role: ', color: 'text-zinc-400' },
-  { text: '"Full Stack Developer"', color: 'text-emerald-400' },
-  { text: ',\n  skills: [', color: 'text-zinc-400' },
-  { text: '\n    "React", "TypeScript", "Node.js"', color: 'text-amber-300' },
-  { text: '\n    "Next.js", "Tailwind CSS", "Python"', color: 'text-amber-300' },
-  { text: '\n  ],\n  passion: ', color: 'text-zinc-400' },
-  { text: '"Building stunning web apps"', color: 'text-emerald-400' },
-  { text: ',\n  status: ', color: 'text-zinc-400' },
-  { text: '"Available for hire"', color: 'text-emerald-400' },
-  { text: '\n};', color: 'text-white font-bold drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' },
+// Each entry = one rendered line; tokens = colored segments
+type Token = { text: string; color: string };
+const codeLines: Token[][] = [
+  // line 1 — comment
+  [{ text: '// 🚀  jean-marc.aguilar.ts', color: 'text-zinc-500 italic' }],
+  // line 2 — blank
+  [{ text: '', color: '' }],
+  // line 3 — import
+  [
+    { text: 'import', color: 'text-purple-400 font-semibold' },
+    { text: ' type ', color: 'text-white' },
+    { text: '{ Developer }', color: 'text-cyan-300' },
+    { text: ' from ', color: 'text-white' },
+    { text: "'@/types'", color: 'text-amber-300' },
+    { text: ';', color: 'text-zinc-500' },
+  ],
+  // line 4 — blank
+  [{ text: '', color: '' }],
+  // line 5 — interface
+  [
+    { text: 'interface ', color: 'text-purple-400 font-semibold' },
+    { text: 'Profile ', color: 'text-cyan-300 font-semibold' },
+    { text: 'extends ', color: 'text-purple-400 font-semibold' },
+    { text: 'Developer', color: 'text-cyan-300' },
+    { text: ' {', color: 'text-zinc-300' },
+  ],
+  // line 6
+  [
+    { text: '  passion', color: 'text-sky-300' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: 'string', color: 'text-cyan-400' },
+    { text: ';', color: 'text-zinc-500' },
+  ],
+  // line 7
+  [
+    { text: '  status', color: 'text-sky-300' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: "'open' | 'hired'", color: 'text-cyan-400' },
+    { text: ';', color: 'text-zinc-500' },
+  ],
+  // line 8
+  [{ text: '}', color: 'text-zinc-300' }],
+  // line 9 — blank
+  [{ text: '', color: '' }],
+  // line 10 — const declaration
+  [
+    { text: 'const ', color: 'text-purple-400 font-semibold' },
+    { text: 'me', color: 'text-white font-semibold' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: 'Profile', color: 'text-cyan-300' },
+    { text: ' = {', color: 'text-zinc-300' },
+  ],
+  // line 11
+  [
+    { text: '  name', color: 'text-sky-300' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: '"Jean Marc Aguilar"', color: 'text-emerald-400' },
+    { text: ',', color: 'text-zinc-500' },
+  ],
+  // line 12
+  [
+    { text: '  role', color: 'text-sky-300' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: '"Full Stack Developer"', color: 'text-emerald-400' },
+    { text: ',', color: 'text-zinc-500' },
+  ],
+  // line 13
+  [
+    { text: '  stack', color: 'text-sky-300' },
+    { text: ': [', color: 'text-zinc-400' },
+    { text: '"React"', color: 'text-amber-300' },
+    { text: ', ', color: 'text-zinc-500' },
+    { text: '"Next.js"', color: 'text-amber-300' },
+    { text: ', ', color: 'text-zinc-500' },
+    { text: '"TypeScript"', color: 'text-amber-300' },
+    { text: '],', color: 'text-zinc-400' },
+  ],
+  // line 14
+  [
+    { text: '  backend', color: 'text-sky-300' },
+    { text: ': [', color: 'text-zinc-400' },
+    { text: '"Node.js"', color: 'text-amber-300' },
+    { text: ', ', color: 'text-zinc-500' },
+    { text: '"PHP"', color: 'text-amber-300' },
+    { text: ', ', color: 'text-zinc-500' },
+    { text: '"Python"', color: 'text-amber-300' },
+    { text: '],', color: 'text-zinc-400' },
+  ],
+  // line 15
+  [
+    { text: '  passion', color: 'text-sky-300' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: '"Crafting stunning web apps ✨"', color: 'text-emerald-400' },
+    { text: ',', color: 'text-zinc-500' },
+  ],
+  // line 16
+  [
+    { text: '  status', color: 'text-sky-300' },
+    { text: ': ', color: 'text-zinc-400' },
+    { text: "'open'", color: 'text-emerald-400' },
+    { text: ',', color: 'text-zinc-500' },
+    { text: '  // 🟢 hire me!', color: 'text-zinc-500 italic' },
+  ],
+  // line 17
+  [{ text: '};', color: 'text-zinc-300' }],
+  // line 18 — blank
+  [{ text: '', color: '' }],
+  // line 19 — export
+  [
+    { text: 'export default ', color: 'text-purple-400 font-semibold' },
+    { text: 'me', color: 'text-white' },
+    { text: ';', color: 'text-zinc-500' },
+  ],
 ];
 
 export function HeroAvatar() {
@@ -58,10 +156,10 @@ export function HeroAvatar() {
         animate={{ opacity: 1, y: 0, rotateX: 0, rotateY: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         style={{ transformPerspective: 1000 }}
-        className="relative w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/20 bg-[#09090C]/90 backdrop-blur-2xl shadow-[0_0_30px_0_rgba(255,255,255,0.12)]"
+        className="relative w-full max-w-[480px] overflow-hidden rounded-2xl border border-white/10 bg-transparent backdrop-blur-xl shadow-[0_0_40px_0_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.06)]"
       >
         {/* Window Header */}
-        <div className="flex items-center gap-2 border-b border-white/10 bg-black/40 px-4 py-3">
+        <div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-3">
           <div className="flex gap-1.5">
             <div className="h-3 w-3 rounded-full bg-[#ff5f56]" />
             <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
@@ -73,7 +171,7 @@ export function HeroAvatar() {
         </div>
 
         {/* Code Content */}
-        <div className="p-6 font-mono text-sm sm:text-[15px] leading-relaxed text-left overflow-x-auto min-h-[280px]">
+        <div className="p-4 font-mono text-[12px] sm:text-[13px] leading-[1.75] text-left overflow-x-auto min-h-[280px]">
           {mounted && (
             <motion.div
               initial="hidden"
@@ -82,29 +180,41 @@ export function HeroAvatar() {
                 hidden: { opacity: 1 },
                 visible: {
                   opacity: 1,
-                  transition: {
-                    staggerChildren: 0.08
-                  }
+                  transition: { staggerChildren: 0.06 }
                 }
               }}
             >
-              {codeLines.map((line, i) => (
-                <motion.span
-                  key={i}
+              {codeLines.map((tokens, lineIdx) => (
+                <motion.div
+                  key={lineIdx}
                   variants={{
-                    hidden: { opacity: 0, display: 'none' },
-                    visible: { opacity: 1, display: 'inline' }
+                    hidden: { opacity: 0, x: -6 },
+                    visible: { opacity: 1, x: 0, transition: { duration: 0.25 } }
                   }}
-                  className={line.color + " whitespace-pre"}
+                  className="flex items-start"
                 >
-                  {line.text}
-                </motion.span>
+                  {/* Gutter line number */}
+                  <span className="select-none w-7 shrink-0 text-right pr-3 text-zinc-600 text-[11px] leading-[1.75]">
+                    {lineIdx + 1}
+                  </span>
+                  {/* Tokens */}
+                  <span className="flex flex-wrap">
+                    {tokens.map((tok, tokIdx) => (
+                      <span key={tokIdx} className={tok.color + ' whitespace-pre'}>
+                        {tok.text}
+                      </span>
+                    ))}
+                    {/* Blinking cursor on last line */}
+                    {lineIdx === codeLines.length - 1 && (
+                      <motion.span
+                        animate={{ opacity: [1, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+                        className="inline-block w-[2px] h-[1em] ml-0.5 translate-y-0.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+                      />
+                    )}
+                  </span>
+                </motion.div>
               ))}
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-2.5 h-4 sm:h-4 ml-1 -mb-0.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]"
-              />
             </motion.div>
           )}
         </div>
