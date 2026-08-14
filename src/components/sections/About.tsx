@@ -11,7 +11,7 @@ import { IconType } from 'react-icons';
 
 export function About() {
   return (
-    <section id="about" className="relative pt-16 pb-16 sm:pt-24 sm:pb-24 scroll-mt-24 sm:scroll-mt-28 flex flex-col items-center justify-center overflow-hidden">
+    <section id="about" className="relative pt-16 pb-16 sm:pt-24 sm:pb-24 scroll-mt-0 flex flex-col items-center justify-center overflow-hidden">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-12">
           

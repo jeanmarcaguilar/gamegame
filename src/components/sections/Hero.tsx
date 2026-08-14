@@ -13,11 +13,12 @@ import { useTypingEffect } from '@/hooks/useTypingEffect';
 import { personalInfo, typingRoles } from '@/constants/personal';
 import { fadeUp, staggerContainer } from '@/animations/variants';
 import TypewriterText from '@/components/TypewriterText';
-import ImageBox from '@/components/ImageBox';
+import Spline from '@splinetool/react-spline';
 
 export function Hero() {
   const typed = useTypingEffect(typingRoles);
   const orbRef = useRef<HTMLDivElement>(null);
+  const imageBoxRef = useRef<HTMLDivElement>(null);
 
   // Subtle GSAP parallax
   useEffect(() => {
@@ -38,24 +39,40 @@ export function Hero() {
     return () => ctx.revert();
   }, []);
 
+  // Fade out ImageBox when scrolling past Hero section
+  useEffect(() => {
+    const el = imageBoxRef.current;
+    if (!el) return;
+    const ctx = gsap.context(() => {
+      gsap.to(el, {
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#home',
+          start: 'bottom top',
+          end: 'bottom top-=200',
+          scrub: true,
+        },
+      });
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
       id="home"
       className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center transition-colors duration-500"
     >
-      {/* ImageBox background */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <ImageBox
-          background="#0a0a0f"
-          lineColor="#ffffff"
-          lineOpacity={0}
-          grid={3}
-          speed={30}
-          boost={50}
-          fade={60}
-          label={false}
+      {/* Spline 3D background — pointer events ENABLED so the cursor interaction works */}
+      <div ref={imageBoxRef} className="absolute inset-0 z-[5] h-screen">
+        <Spline
+          scene="https://prod.spline.design/si0FoV7XZ1XjbCzK/scene.splinecode"
+          style={{ width: '100%', height: '100%' }}
         />
+        {/* Gradient fade at bottom to blend into next section */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent pointer-events-none" />
       </div>
+
 
       <div className="relative z-10 mx-auto grid max-w-[1400px] w-full grid-cols-1 items-center gap-12 px-6 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:px-12">
 

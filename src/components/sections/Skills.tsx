@@ -282,7 +282,7 @@ export function Skills() {
     <section
       id="skills"
       aria-label="Skills"
-      className="relative flex w-full items-start justify-center overflow-hidden pb-10 sm:pb-12 lg:pb-14 scroll-mt-[2vh] sm:scroll-mt-[3vh] lg:scroll-mt-[4vh]"
+      className="relative flex w-full items-start justify-center overflow-hidden pb-10 sm:pb-12 lg:pb-14 scroll-mt-0"
     >
       {/* Container — 3-col on lg, with the globe taking the dominant
           center column. On mobile everything stacks vertically. */}

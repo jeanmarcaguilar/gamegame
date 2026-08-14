@@ -32,16 +32,18 @@ export interface GlobeSkill {
  * so the cards naturally surround the sphere.
  */
 export const globeSkills: GlobeSkill[] = [
-  { name: 'React', icon: 'FaReact', color: '#9333EA', category: 'Frontend' },
-  { name: 'TypeScript', icon: 'SiTypescript', color: '#9333EA', category: 'Frontend' },
-  { name: 'Node.js', icon: 'FaNodeJs', color: '#9333EA', category: 'Backend' },
-  { name: 'Next.js', icon: 'SiNextdotjs', color: '#9333EA', category: 'Frontend' },
-  { name: 'Tailwind CSS', icon: 'SiTailwindcss', color: '#9333EA', category: 'Frontend' },
-  { name: 'Python', icon: 'FaPython', color: '#9333EA', category: 'Programming' },
-  { name: 'JavaScript', icon: 'FaJs', color: '#9333EA', category: 'Frontend' },
-  { name: 'GraphQL', icon: 'SiGraphql', color: '#9333EA', category: 'Backend' },
-  { name: 'PostgreSQL', icon: 'SiPostgresql', color: '#9333EA', category: 'Database' },
-  { name: 'Docker', icon: 'FaDocker', color: '#9333EA', category: 'Tools' },
+  { name: 'HTML5', icon: 'FaHtml5', color: '#E34F26', category: 'Frontend' },
+  { name: 'CSS3', icon: 'FaCss3Alt', color: '#1572B6', category: 'Frontend' },
+  { name: 'JavaScript', icon: 'FaJs', color: '#F7DF1E', category: 'Frontend' },
+  { name: 'React', icon: 'FaReact', color: '#61DAFB', category: 'Frontend' },
+  { name: 'Tailwind CSS', icon: 'SiTailwindcss', color: '#38BDF8', category: 'Frontend' },
+  { name: 'PHP', icon: 'FaPhp', color: '#777BB4', category: 'Backend' },
+  { name: 'Node.js', icon: 'FaNodeJs', color: '#3C873A', category: 'Backend' },
+  { name: 'MySQL', icon: 'SiMysql', color: '#4479A1', category: 'Database' },
+  { name: 'Java', icon: 'FaJava', color: '#E76F00', category: 'Programming' },
+  { name: 'Python', icon: 'FaPython', color: '#3776AB', category: 'Programming' },
+  { name: 'Git', icon: 'FaGitAlt', color: '#F05032', category: 'Tools' },
+  { name: 'Three.js', icon: 'SiThreedotjs', color: '#000000', category: 'Frontend' },
 ];
 
 export const skillCategories: SkillCategory[] = [

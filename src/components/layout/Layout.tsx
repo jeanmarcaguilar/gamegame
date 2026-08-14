@@ -9,7 +9,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  useSmoothScroll(80);
+  useSmoothScroll(0);
   return (
     <div className="relative min-h-screen bg-bg text-text">
       <a
