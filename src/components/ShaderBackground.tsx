@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 /* shader */ 
 const SHADER_SRC = `#version 300 es
