@@ -80,10 +80,10 @@ export function ProjectCard({ project, onOpen, index = 0 }: ProjectCardProps) {
       <div className="relative aspect-[2/1] w-full overflow-hidden bg-[#0a0f1c]">
         {/* Background ambient glow */}
         <div className={`absolute top-1/2 left-1/4 -translate-y-1/2 w-[80%] h-[150%] rounded-[100%] blur-[80px] opacity-30 ${theme.bgGlow}`} />
-        
+
         {/* Mock UI Composition */}
         <MockUIGraphic theme={theme} badge={project.badge} />
-        
+
         {/* Fade to bottom */}
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#080b14] to-transparent" />
       </div>
@@ -169,7 +169,7 @@ function MockUIGraphic({ theme, badge }: { theme: any, badge?: string }) {
         {/* Concentric rings */}
         <div className={`absolute w-24 h-24 sm:w-32 sm:h-32 rounded-full border ${theme.ringColor} opacity-50`} />
         <div className={`absolute w-36 h-36 sm:w-48 sm:h-48 rounded-full border ${theme.ringColor} opacity-20`} />
-        
+
         {/* Core Icon */}
         <div className={`relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full ${theme.iconBg} border ${theme.ringColor} shadow-[0_0_20px_currentColor] ${theme.textColor}`}>
           <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -191,10 +191,10 @@ function MockUIGraphic({ theme, badge }: { theme: any, badge?: string }) {
           </div>
           <div className="flex-1 flex items-end gap-1.5 h-12">
             {[40, 70, 45, 90, 60].map((height, i) => (
-              <div 
-                key={i} 
-                className={`w-full rounded-t-sm ${i === 3 ? theme.iconBg.replace('20', '80') : 'bg-gray-600/30'}`} 
-                style={{ height: `${height}%` }} 
+              <div
+                key={i}
+                className={`w-full rounded-t-sm ${i === 3 ? theme.iconBg.replace('20', '80') : 'bg-gray-600/30'}`}
+                style={{ height: `${height}%` }}
               />
             ))}
           </div>

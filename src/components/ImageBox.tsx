@@ -4,11 +4,22 @@ import { useEffect, useMemo, useRef, type CSSProperties } from "react";
 import * as THREE from "three";
 
 const DEFAULT_IMAGES = [
-    "https://imagedelivery.net/IEUjvl3YUlxY-MrTpOAWDQ/f8b3688c-11d0-425c-0b6f-66f133322c00/w=800",
-    "https://imagedelivery.net/IEUjvl3YUlxY-MrTpOAWDQ/c083d83a-f5a4-4434-989f-4eaa9bbe7500/w=800",
-    "https://imagedelivery.net/IEUjvl3YUlxY-MrTpOAWDQ/12e8b0be-f114-4134-1ab7-53116bfc2800/w=800",
-    "https://imagedelivery.net/IEUjvl3YUlxY-MrTpOAWDQ/b14ae2a2-1116-4a7f-0a18-1d74c4a46f00/w=800",
-    "https://imagedelivery.net/IEUjvl3YUlxY-MrTpOAWDQ/babdb603-8b5b-4520-58d6-240a34463c00/w=800",
+    "/admins/1.jpg",
+    "/admins/2.jpg",
+    "/admins/3.jpg",
+    "/admins/4.jpg",
+    "/Sjdm/d.jpg",
+    "/Sjdm/j.jpg",
+    "/Sjdm/m.jpg",
+    "/Sjdm/s.jpg",
+    "/Floor-plan/a.jpg",
+    "/Floor-plan/m.jpg",
+    "/Floor-plan/r.jpg",
+    "/Floor-plan/s.jpg",
+    "/Look gallery/a.jpg",
+    "/Look gallery/b.jpg",
+    "/Look gallery/c.jpg",
+    "/Look gallery/d.jpg",
 ];
 
 const DEFAULTS = {

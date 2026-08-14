@@ -45,7 +45,7 @@ export function Hero() {
     >
       {/* ImageBox background */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <ImageBox 
+        <ImageBox
           background="#0a0a0f"
           lineColor="#ffffff"
           lineOpacity={0}
@@ -58,7 +58,7 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto grid max-w-[1400px] w-full grid-cols-1 items-center gap-12 px-6 sm:px-8 lg:grid-cols-12 lg:gap-16 lg:px-12">
-        
+
         {/* Left — text */}
         <motion.div
           variants={staggerContainer(0.12, 0.1)}
@@ -79,7 +79,7 @@ export function Hero() {
             variants={fadeUp}
             className="mb-2"
           >
-            <TypewriterText 
+            <TypewriterText
               font={{
                 fontFamily: "font-display",
                 fontWeight: 900,

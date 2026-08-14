@@ -9,9 +9,9 @@
 ----------------------------------------------------------- */
 :root {
   /* Surface — Modern Obsidian Black theme */
-  --color-bg: #050505;             /* page background (pure modern black) */
-  --color-bg-secondary: #0D0D10;   /* alt section background (deep charcoal) */
-  --color-card: #0F0F12;           /* card / surface */
+  --color-bg: #121212;             /* page background (lighter modern black) */
+  --color-bg-secondary: #1A1A1E;   /* alt section background (lighter charcoal) */
+  --color-card: #1E1E22;           /* card / surface */
   --color-border: rgba(255, 255, 255, 0.12); /* sleek white border @ 12% */
   --color-border-strong: rgba(255, 255, 255, 0.25);
 
@@ -42,8 +42,8 @@
   --color-radial-glow: rgba(255, 255, 255, 0.15);
 
   /* SVG artwork */
-  --color-art-bg-from: #121215;
-  --color-art-bg-to: #050505;
+  --color-art-bg-from: #1A1A1E;
+  --color-art-bg-to: #121212;
   --color-art-grid: rgba(255, 255, 255, 0.05);
   --color-art-stroke: rgba(255, 255, 255, 0.12);
   --color-art-text: #FFFFFF;
@@ -52,10 +52,10 @@
   --color-art-fg-strong: rgba(255, 255, 255, 0.1);
 
   /* Scrollbar */
-  --color-scrollbar-track: #050505;
-  --color-scrollbar-thumb: #1F1F24;
-  --color-scrollbar-thumb-hover: #3F3F46;
-  --color-scrollbar-border: #050505;
+  --color-scrollbar-track: #121212;
+  --color-scrollbar-thumb: #2A2A30;
+  --color-scrollbar-thumb-hover: #4A4A52;
+  --color-scrollbar-border: #121212;
 
   /* Type & easing */
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -77,9 +77,9 @@
    Dark mode — additive via `<html class="dark">`.
 ----------------------------------------------------------- */
 html.dark {
-  --color-bg: #030303;
-  --color-bg-secondary: #0A0A0C;
-  --color-card: #0D0D10;
+  --color-bg: #0A0A0C;
+  --color-bg-secondary: #121216;
+  --color-card: #16161A;
   --color-border: rgba(255, 255, 255, 0.14);
   --color-border-strong: rgba(255, 255, 255, 0.28);
 
@@ -105,8 +105,8 @@ html.dark {
   --color-glow-soft: rgba(255, 255, 255, 0.55);
   --color-radial-glow: rgba(255, 255, 255, 0.2);
 
-  --color-art-bg-from: #16161B;
-  --color-art-bg-to: #030303;
+  --color-art-bg-from: #1E1E24;
+  --color-art-bg-to: #0A0A0C;
   --color-art-grid: rgba(255, 255, 255, 0.06);
   --color-art-stroke: rgba(255, 255, 255, 0.14);
   --color-art-text: #FFFFFF;
@@ -114,10 +114,10 @@ html.dark {
   --color-art-fg: rgba(255, 255, 255, 0.06);
   --color-art-fg-strong: rgba(255, 255, 255, 0.12);
 
-  --color-scrollbar-track: #030303;
-  --color-scrollbar-thumb: #18181B;
-  --color-scrollbar-thumb-hover: #27272A;
-  --color-scrollbar-border: #030303;
+  --color-scrollbar-track: #0A0A0C;
+  --color-scrollbar-thumb: #1E1E24;
+  --color-scrollbar-thumb-hover: #2E2E36;
+  --color-scrollbar-border: #0A0A0C;
 
   --color-tint-from: rgba(255, 255, 255, 0.06);
   --color-tint-via: rgba(255, 255, 255, 0.03);
