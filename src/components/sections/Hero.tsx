@@ -21,33 +21,70 @@ export function Hero() {
   const imageBoxRef = useRef<HTMLDivElement>(null);
   const splineRef = useRef<any>(null);
 
-  // Track mouse position for cursor interaction
+  // Track mouse position for cursor interaction with smooth lerping.
+  // Throttled to ~30fps (Spline scenes don't need 60fps updates) and skips
+  // writes once the lerp has converged, instead of writing near-identical
+  // values on every single frame forever.
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!splineRef.current) return;
+    let targetX = 0.5;
+    let targetY = 0.5;
+    let targetDistance = 0;
+    let currentX = 0.5;
+    let currentY = 0.5;
+    let currentDistance = 0;
+    let animationFrameId: number | null = null;
+    let lastUpdate = 0;
+    const FRAME_INTERVAL = 1000 / 30; // cap at 30fps
+    const CONVERGENCE_THRESHOLD = 0.0005;
 
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      
-      // Calculate distance from center (0 to 1)
-      const distanceX = Math.abs(e.clientX - centerX) / centerX;
-      const distanceY = Math.abs(e.clientY - centerY) / centerY;
-      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    const lerp = (start: number, end: number, factor: number) => {
+      return start + (end - start) * factor;
+    };
 
-      // Send cursor position to Spline scene
+    const updateSplineVariables = (now: number) => {
+      animationFrameId = requestAnimationFrame(updateSplineVariables);
+
+      if (now - lastUpdate < FRAME_INTERVAL) return;
+      lastUpdate = now;
+
+      const lerpFactor = 0.08;
+
+      currentX = lerp(currentX, targetX, lerpFactor);
+      currentY = lerp(currentY, targetY, lerpFactor);
+      currentDistance = lerp(currentDistance, targetDistance, lerpFactor);
+
+      // Skip the setVariable calls entirely once values have basically
+      // settled — this removes most of the idle-mouse overhead
+      const delta =
+        Math.abs(currentX - targetX) +
+        Math.abs(currentY - targetY) +
+        Math.abs(currentDistance - targetDistance);
+      if (delta < CONVERGENCE_THRESHOLD) return;
+
       try {
         if (splineRef.current && splineRef.current.setVariable) {
-          splineRef.current.setVariable('cursorDistance', distance);
-          splineRef.current.setVariable('cursorX', e.clientX / window.innerWidth);
-          splineRef.current.setVariable('cursorY', e.clientY / window.innerHeight);
+          splineRef.current.setVariable('cursorDistance', currentDistance);
+          splineRef.current.setVariable('cursorX', currentX);
+          splineRef.current.setVariable('cursorY', currentY);
         }
       } catch (error) {
         // Silently handle if variables aren't set up in Spline scene
       }
     };
 
+    const handleMouseMove = (e: MouseEvent) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const distanceX = Math.abs(e.clientX - centerX) / centerX;
+      const distanceY = Math.abs(e.clientY - centerY) / centerY;
+
+      targetX = e.clientX / window.innerWidth;
+      targetY = e.clientY / window.innerHeight;
+      targetDistance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    };
+
     const handleLoad = () => {
-      // Initialize with center position
       if (splineRef.current && splineRef.current.setVariable) {
         try {
           splineRef.current.setVariable('cursorDistance', 0);
@@ -59,53 +96,60 @@ export function Hero() {
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    // Set up load event
+    // passive: true lets the browser optimize scroll/paint around this listener
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
     if (splineRef.current) {
       splineRef.current.addEventListener('load', handleLoad);
     }
+
+    animationFrameId = requestAnimationFrame(updateSplineVariables);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       if (splineRef.current) {
         splineRef.current.removeEventListener('load', handleLoad);
       }
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 
-  // Subtle GSAP parallax
+  // Subtle GSAP parallax with smoother scroll.
+  // scrub lowered slightly + paired with Lenis (SmoothScrollProvider)
+  // for a less "sticky" feel than scrub tied 1:1 to raw scroll position.
   useEffect(() => {
     const el = orbRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
       gsap.to(el, {
         yPercent: -8,
-        ease: 'power3.inOut',
+        ease: 'power2.inOut',
         scrollTrigger: {
           trigger: '#home',
           start: 'top top',
           end: 'bottom top',
-          scrub: 2.5,
+          scrub: 0.6,
         },
       });
     }, el);
     return () => ctx.revert();
   }, []);
 
-  // Fade out ImageBox when scrolling past Hero section
+  // Fade out ImageBox when scrolling past Hero section with smoother transition
   useEffect(() => {
     const el = imageBoxRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
       gsap.to(el, {
         opacity: 0,
-        ease: 'power3.inOut',
+        ease: 'power2.inOut',
         scrollTrigger: {
           trigger: '#home',
           start: 'bottom top',
           end: 'bottom top-=200',
-          scrub: 2.5,
+          scrub: 0.6,
         },
       });
     }, el);
@@ -118,8 +162,16 @@ export function Hero() {
       className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center transition-colors duration-500"
     >
       {/* Spline 3D background — pointer events ENABLED so the cursor interaction works */}
-      <div ref={imageBoxRef} className="absolute inset-0 z-[5] h-screen">
-        <div ref={orbRef} className="h-full w-full">
+      <div
+        ref={imageBoxRef}
+        className="absolute inset-0 z-[5] h-screen"
+        style={{ willChange: 'opacity' }}
+      >
+        <div
+          ref={orbRef}
+          className="h-full w-full"
+          style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+        >
           <Spline
             ref={splineRef}
             scene="https://prod.spline.design/si0FoV7XZ1XjbCzK/scene.splinecode"

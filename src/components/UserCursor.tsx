@@ -131,11 +131,11 @@ function __OriginkitBase_UserCursor(props: Props) {
     const [pressed, setPressed] = useState(false)
 
     const arrowSpring = useMemo<SpringOptions>(
-        () => ({ stiffness: 380, damping: 32, mass: 0.6 }),
+        () => ({ stiffness: 200, damping: 40, mass: 0.8 }), // Reduced stiffness for better performance
         []
     )
     const labelSpringCfg = useMemo<SpringOptions>(
-        () => ({ stiffness: 220, damping: 26, mass: 0.7 }),
+        () => ({ stiffness: 150, damping: 30, mass: 0.9 }), // Reduced stiffness for better performance
         []
     )
 

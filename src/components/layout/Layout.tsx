@@ -2,14 +2,12 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/sections/Footer';
 import { ThemeTransition } from '@/components/ThemeTransition';
 import UserCursor from '@/components/UserCursor';
-import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  useSmoothScroll(0);
   return (
     <div className="relative min-h-screen bg-bg text-text">
       <a
