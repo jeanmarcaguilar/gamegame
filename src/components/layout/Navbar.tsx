@@ -52,34 +52,71 @@ function useScrollState() {
 
   useEffect(() => {
     let lastY = window.scrollY;
-    let lastTime = performance.now();
-    let rafId: number;
+    let lastT = performance.now();
+    let queued = false;
+    let rafId = 0;
+    let stopTimer: ReturnType<typeof setTimeout> | null = null;
 
-    const onScroll = () => {
+    // Thresholds: only commit React state when something the UI actually
+    // cares about changed. Without these, every animation frame during a
+    // smooth scroll was triggering setVelocity/setScrolled/setProgress
+    // and re-rendering the entire portal tree (capsule nav, droplets,
+    // bubbles, scroll bar) at 60Hz. Now we re-render at most when the
+    // visible "scrolled" flag flips, when the progress bar needs a new
+    // width, or while the velocity deadband is exceeded.
+    const PROGRESS_EPS = 0.002; // ~0.2% page scroll
+    const VELOCITY_EPS = 0.04;  // px/ms — matches CapsuleNav's deadband
+    const lastCommitted = { scrolled: false, progress: 0, velocity: 0 };
+
+    const tick = () => {
+      queued = false;
       const now = performance.now();
       const y = window.scrollY;
-      const dt = now - lastTime || 1;
+      const dt = Math.max(now - lastT, 1);
       const vel = (y - lastY) / dt; // px/ms
-
-      setVelocity(vel);
-      setScrolled(y > 60);
-
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(y / max, 1) : 0);
+      const nextScrolled = y > 60;
+      const nextProgress = max > 0 ? Math.min(y / max, 1) : 0;
+
+      if (nextScrolled !== lastCommitted.scrolled) {
+        setScrolled(nextScrolled);
+        lastCommitted.scrolled = nextScrolled;
+      }
+      if (Math.abs(nextProgress - lastCommitted.progress) > PROGRESS_EPS) {
+        setProgress(nextProgress);
+        lastCommitted.progress = nextProgress;
+      }
+      if (Math.abs(vel - lastCommitted.velocity) > VELOCITY_EPS) {
+        setVelocity(vel);
+        lastCommitted.velocity = vel;
+      }
 
       lastY = y;
-      lastTime = now;
-
-      // Decay velocity to zero after scroll stops
-      clearTimeout(rafId as unknown as number);
-      rafId = setTimeout(() => setVelocity(0), 100) as unknown as number;
+      lastT = now;
     };
 
-    onScroll();
+    const onScroll = () => {
+      if (!queued) {
+        queued = true;
+        rafId = requestAnimationFrame(tick);
+      }
+      // Final zero-velocity commit when scrolling stops
+      if (stopTimer) clearTimeout(stopTimer);
+      stopTimer = setTimeout(() => {
+        setVelocity(0);
+        lastCommitted.velocity = 0;
+      }, 120);
+    };
+
+    // Prime once on mount so the initial values are accurate
+    setScrolled(lastY > 60);
+    setProgress(0);
+
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
-      clearTimeout(rafId as unknown as number);
+      cancelAnimationFrame(rafId);
+      if (stopTimer) clearTimeout(stopTimer);
     };
   }, []);
 
@@ -97,13 +134,17 @@ function CapsuleNav({ activeId, onNavClick }: { activeId: string | null; onNavCl
 
   useEffect(() => {
     const clampedVel = Math.max(-2, Math.min(2, velocity));
-    if (Math.abs(clampedVel) > 0.05) {
-      scaleY.set(1 - Math.abs(clampedVel) * 0.08);
-      scaleX.set(1 + Math.abs(clampedVel) * 0.05);
-    } else {
+    // Deadband: the rAF-coalesced scroll handler still commits every
+    // frame during continuous smooth scroll, but `velocity` hovers
+    // near zero. Skip the spring `.set()` calls unless it's actually
+    // meaningful so the springs don't churn on every frame.
+    if (Math.abs(clampedVel) < 0.04) {
       scaleY.set(1);
       scaleX.set(1);
+      return;
     }
+    scaleY.set(1 - Math.abs(clampedVel) * 0.08);
+    scaleX.set(1 + Math.abs(clampedVel) * 0.05);
   }, [velocity, scaleX, scaleY]);
 
   // Click-triggered liquid splatters
@@ -213,26 +254,14 @@ function CapsuleNav({ activeId, onNavClick }: { activeId: string | null; onNavCl
             }}
             transition={{ type: 'spring', stiffness: 220, damping: 20 }}
           >
-            {/* Main capsule container */}
-            <motion.div
-              animate={{
-                background: scrolled ? 'rgba(5,5,8,0.98)' : 'rgba(8,8,12,0.88)',
-                borderColor: scrolled ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.18)',
-                boxShadow: scrolled
-                  ? `0 18px 50px rgba(0,0,0,0.95), 0 0 35px rgba(255,255,255,${0.1 + progress * 0.22})`
-                  : '0 8px 30px rgba(0,0,0,0.85), 0 0 16px rgba(255,255,255,0.08)',
-              }}
-              transition={{ duration: 0.4, ease: 'easeInOut' }}
-              style={{
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                borderRadius: '9999px',
-                border: '1px solid rgba(255,255,255,0.18)',
-                padding: '8px 10px',
-                backdropFilter: scrolled ? 'blur(36px) saturate(200%)' : 'blur(20px)',
-                WebkitBackdropFilter: scrolled ? 'blur(36px) saturate(200%)' : 'blur(20px)',
-              }}
+            {/* Main capsule container — appearance is now driven by the
+                 `.capsule` / `.capsule-shadow` CSS classes (in globals.css)
+                 toggled on `scrolled`, NOT by per-frame motion values.
+                 The previous animate= on `background` / `borderColor` /
+                 `box-shadow` was paint churn; the new path only re-paints
+                 when `scrolled` flips (once at 60px). */}
+            <div
+              className={`capsule ${scrolled ? 'is-scrolled' : ''} capsule-shadow ${scrolled ? 'is-scrolled' : ''}`}
             >
               {/* Liquid Gooey Background Canvas Layer */}
               <div 
@@ -359,7 +388,7 @@ function CapsuleNav({ activeId, onNavClick }: { activeId: string | null; onNavCl
                 );
               })}
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Scroll progress track */}

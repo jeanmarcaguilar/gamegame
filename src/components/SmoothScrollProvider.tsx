@@ -25,21 +25,21 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.1,
       touchMultiplier: 1.5,
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      infinite: false,
     });
 
     // Keep ScrollTrigger in lockstep with Lenis's interpolated scroll position
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Drive Lenis from GSAP's own ticker so everything animates on one clock
+    // Drive Lenis directly from GSAP's ticker for 60/120fps sync
     const update = (time: number) => {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(update);
-
-    // Prevents GSAP from "catching up" with a jump after a dropped frame,
-    // which is a common source of visible stutter
     gsap.ticker.lagSmoothing(0);
 
     return () => {

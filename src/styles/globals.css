@@ -135,7 +135,8 @@ html.dark {
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Native scroll-behavior removed — Lenis is the single source of truth
+     for smooth scroll. Two interpolators fighting causes per-frame jank. */
   font-family: var(--font-sans);
   background: var(--color-bg);
   transition: background-color 0.3s var(--ease-out-soft);
@@ -160,18 +161,18 @@ body {
    `:root` and `html.dark`. This optimized transition targets
    only the most critical properties to prevent lag while
    maintaining smooth visual transitions.
+
+   `box-shadow` is paint (not composite) and was causing scroll-
+   driven re-paints; dropped. `.glass`/`.glass-soft` are scoped
+   to their own rules below so they don't widen the cascade.
 ----------------------------------------------------------- */
 body,
-.glass,
-.glass-soft,
-.surface-2,
-.card,
 button,
 a,
 input,
 textarea,
 select {
-  transition-property: background-color, border-color, color, box-shadow;
+  transition-property: background-color, border-color, color;
   transition-duration: 0.3s;
   transition-timing-function: var(--ease-out-soft);
 }
@@ -184,7 +185,11 @@ svg {
 
 /* Two soft, fixed-position color blobs that drift behind the whole page.
    They give the light theme a warm, airy "morning" feel and the dark
-   theme a nebula-like backdrop. Color-tokens pick the theme variants. */
+   theme a nebula-like backdrop. Color-tokens pick the theme variants.
+
+   Promoted to its own compositor layer so the stacked radial gradients
+   don't repaint during scroll on some platforms. The `opacity` transition
+   was removed — it triggered per-frame re-rasterization while scrolling. */
 body::before {
   content: '';
   position: fixed;
@@ -196,7 +201,8 @@ body::before {
     radial-gradient(50rem 35rem at 100% 20%, var(--color-tint-via), transparent 55%),
     radial-gradient(60rem 45rem at 50% 110%, var(--color-tint-to), transparent 60%);
   opacity: 0.9;
-  transition: opacity 0.5s var(--ease-out-soft);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 ::selection {
@@ -233,8 +239,6 @@ body::before {
     border: 1px solid var(--color-border);
     transition: background-color 0.3s var(--ease-out-soft),
                 border-color 0.3s var(--ease-out-soft);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
   }
 
   .glass-soft {
@@ -244,8 +248,6 @@ body::before {
     border: 1px solid var(--color-overlay-medium);
     transition: background-color 0.3s var(--ease-out-soft),
                 border-color 0.3s var(--ease-out-soft);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
   }
 
   .section-tint {
@@ -475,6 +477,58 @@ body::before {
 }
 
 /* -----------------------------------------------------------
+   Off-screen section containment
+
+   `content-visibility: auto` lets the browser skip layout/paint
+   for sections the user can't see. The intrinsic-size estimate
+   keeps the scrollbar height correct so it doesn't jump.
+
+   `contain: layout style paint` is the explicit modern equivalent
+   of the same containment boundary; both are belt-and-suspenders
+   for browser versions that handle them differently.
+----------------------------------------------------------- */
+section[id] {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 100vh;
+  contain: layout style paint;
+}
+
+/* -----------------------------------------------------------
+   Capsule nav (see Navbar.tsx)
+----------------------------------------------------------- */
+.capsule {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 8px 10px;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background: rgba(8, 8, 12, 0.88);
+  transition: backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease,
+              background-color 0.4s ease, border-color 0.4s ease;
+}
+.capsule.is-scrolled {
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  background: rgba(5, 5, 8, 0.98);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+.capsule-shadow {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.85),
+              0 0 16px rgba(255, 255, 255, 0.08);
+  transition: box-shadow 0.4s ease;
+}
+.capsule-shadow.is-scrolled {
+  /* Note: the original animated 0.1 + progress*0.22 white halo is
+     dropped — animating `box-shadow` was paint on every frame. The
+     static halo below keeps the "lit" look without that cost. */
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.95),
+              0 0 32px rgba(255, 255, 255, 0.18);
+}
+
+/* -----------------------------------------------------------
    Reduced motion
 ----------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
@@ -484,7 +538,6 @@ body::before {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 

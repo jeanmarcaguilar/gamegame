@@ -21,10 +21,7 @@ export function Hero() {
   const imageBoxRef = useRef<HTMLDivElement>(null);
   const splineRef = useRef<any>(null);
 
-  // Track mouse position for cursor interaction with smooth lerping.
-  // Throttled to ~30fps (Spline scenes don't need 60fps updates) and skips
-  // writes once the lerp has converged, instead of writing near-identical
-  // values on every single frame forever.
+  // Smooth cursor interaction with Spline scene
   useEffect(() => {
     let targetX = 0.5;
     let targetY = 0.5;
@@ -33,33 +30,19 @@ export function Hero() {
     let currentY = 0.5;
     let currentDistance = 0;
     let animationFrameId: number | null = null;
-    let lastUpdate = 0;
-    const FRAME_INTERVAL = 1000 / 30; // cap at 30fps
-    const CONVERGENCE_THRESHOLD = 0.0005;
+    let isTracking = true;
 
     const lerp = (start: number, end: number, factor: number) => {
       return start + (end - start) * factor;
     };
 
-    const updateSplineVariables = (now: number) => {
-      animationFrameId = requestAnimationFrame(updateSplineVariables);
+    const tick = () => {
+      if (!isTracking) return;
 
-      if (now - lastUpdate < FRAME_INTERVAL) return;
-      lastUpdate = now;
-
-      const lerpFactor = 0.08;
-
+      const lerpFactor = 0.06;
       currentX = lerp(currentX, targetX, lerpFactor);
       currentY = lerp(currentY, targetY, lerpFactor);
       currentDistance = lerp(currentDistance, targetDistance, lerpFactor);
-
-      // Skip the setVariable calls entirely once values have basically
-      // settled — this removes most of the idle-mouse overhead
-      const delta =
-        Math.abs(currentX - targetX) +
-        Math.abs(currentY - targetY) +
-        Math.abs(currentDistance - targetDistance);
-      if (delta < CONVERGENCE_THRESHOLD) return;
 
       try {
         if (splineRef.current && splineRef.current.setVariable) {
@@ -67,10 +50,14 @@ export function Hero() {
           splineRef.current.setVariable('cursorX', currentX);
           splineRef.current.setVariable('cursorY', currentY);
         }
-      } catch (error) {
-        // Silently handle if variables aren't set up in Spline scene
+      } catch {
+        /* scene doesn't expose variables — safely ignored */
       }
+
+      animationFrameId = requestAnimationFrame(tick);
     };
+
+    animationFrameId = requestAnimationFrame(tick);
 
     const handleMouseMove = (e: MouseEvent) => {
       const centerX = window.innerWidth / 2;
@@ -90,22 +77,19 @@ export function Hero() {
           splineRef.current.setVariable('cursorDistance', 0);
           splineRef.current.setVariable('cursorX', 0.5);
           splineRef.current.setVariable('cursorY', 0.5);
-        } catch (error) {
-          // Silently handle if variables aren't set up
+        } catch {
+          /* scene doesn't expose variables */
         }
       }
     };
 
-    // passive: true lets the browser optimize scroll/paint around this listener
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-
     if (splineRef.current) {
       splineRef.current.addEventListener('load', handleLoad);
     }
 
-    animationFrameId = requestAnimationFrame(updateSplineVariables);
-
     return () => {
+      isTracking = false;
       window.removeEventListener('mousemove', handleMouseMove);
       if (splineRef.current) {
         splineRef.current.removeEventListener('load', handleLoad);
@@ -116,40 +100,38 @@ export function Hero() {
     };
   }, []);
 
-  // Subtle GSAP parallax with smoother scroll.
-  // scrub lowered slightly + paired with Lenis (SmoothScrollProvider)
-  // for a less "sticky" feel than scrub tied 1:1 to raw scroll position.
+  // Smooth GSAP parallax for Hero background
   useEffect(() => {
     const el = orbRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
       gsap.to(el, {
-        yPercent: -8,
-        ease: 'power2.inOut',
+        yPercent: -12,
+        ease: 'none',
         scrollTrigger: {
           trigger: '#home',
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.6,
+          scrub: 1,
         },
       });
     }, el);
     return () => ctx.revert();
   }, []);
 
-  // Fade out ImageBox when scrolling past Hero section with smoother transition
+  // Smooth fade out of ImageBox when scrolling past Hero
   useEffect(() => {
     const el = imageBoxRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
       gsap.to(el, {
         opacity: 0,
-        ease: 'power2.inOut',
+        ease: 'none',
         scrollTrigger: {
           trigger: '#home',
-          start: 'bottom top',
-          end: 'bottom top-=200',
-          scrub: 0.6,
+          start: 'center top',
+          end: 'bottom top',
+          scrub: 1,
         },
       });
     }, el);
@@ -161,16 +143,16 @@ export function Hero() {
       id="home"
       className="relative overflow-hidden min-h-screen pt-28 pb-10 scroll-mt-0 flex items-center transition-colors duration-500"
     >
-      {/* Spline 3D background — pointer events ENABLED so the cursor interaction works */}
+      {/* Spline 3D background — hardware accelerated container */}
       <div
         ref={imageBoxRef}
-        className="absolute inset-0 z-[5] h-screen"
-        style={{ willChange: 'opacity' }}
+        className="absolute inset-0 z-[5] h-screen pointer-events-auto"
+        style={{ willChange: 'opacity, transform', transform: 'translate3d(0,0,0)' }}
       >
         <div
           ref={orbRef}
           className="h-full w-full"
-          style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+          style={{ willChange: 'transform', transform: 'translate3d(0,0,0)' }}
         >
           <Spline
             ref={splineRef}
@@ -187,7 +169,7 @@ export function Hero() {
             display: none !important;
           }
         `}</style>
-        {/* Gradient fade at bottom to blend into next section */}
+        {/* Gradient fade at bottom to blend seamlessly into next section */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent pointer-events-none" />
       </div>
 

@@ -141,12 +141,30 @@ export function HeroAvatar() {
   const [charCount, setCharCount] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(true);
 
   const ReactIcon = getIcon('FaReact');
   const TailwindIcon = getIcon('SiTailwindcss');
   const NodeIcon = getIcon('FaNodeJs');
 
   useEffect(() => { setMounted(true); }, []);
+
+  // Pause all infinite background-blob and floating-icon animations
+  // when this component scrolls out of the viewport. Three heavily
+  // blurred `motion.div`s + three infinite keyframe loops were running
+  // forever even while the user was reading other sections.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+    const el = hostRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '120px' },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // Typing loop
   useEffect(() => {
@@ -206,10 +224,10 @@ export function HeroAvatar() {
   }, [charCount]);
 
   return (
-    <div className="relative mx-auto flex w-full max-w-[600px] items-center justify-center scale-95 sm:scale-100 py-10">
-      {/* Decorative Background Elements */}
+    <div ref={hostRef} className="relative mx-auto flex w-full max-w-[600px] items-center justify-center scale-95 sm:scale-100 py-10">
+      {/* Decorative Background Elements — only animated while in view */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center -z-10">
-        {mounted && (
+        {mounted && inView && (
           <>
             <motion.div
               animate={{ rotate: 360 }}
@@ -299,8 +317,8 @@ export function HeroAvatar() {
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
       </motion.div>
 
-      {/* Floating Tech Icons */}
-      {mounted && (
+      {/* Floating Tech Icons — animated only while in view */}
+      {mounted && inView && (
         <>
           <motion.div
             initial={{ opacity: 0, scale: 0 }}

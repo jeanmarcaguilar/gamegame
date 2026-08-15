@@ -1,13 +1,5 @@
 import * as React from "react"
 import { useEffect, useMemo, useRef, useState } from "react"
-import {
-    motion,
-    useMotionValue,
-    useSpring,
-    useTransform,
-    animate,
-    type SpringOptions,
-} from "framer-motion"
 
 type ClassNames = {
     root?: string
@@ -130,15 +122,6 @@ function __OriginkitBase_UserCursor(props: Props) {
     const [hovering, setHovering] = useState(false)
     const [pressed, setPressed] = useState(false)
 
-    const arrowSpring = useMemo<SpringOptions>(
-        () => ({ stiffness: 200, damping: 40, mass: 0.8 }), // Reduced stiffness for better performance
-        []
-    )
-    const labelSpringCfg = useMemo<SpringOptions>(
-        () => ({ stiffness: 150, damping: 30, mass: 0.9 }), // Reduced stiffness for better performance
-        []
-    )
-
     const resolvedOffset = useMemo(
         () => ({
             x: offsetOverride?.x ?? offsetX ?? 0,
@@ -167,31 +150,106 @@ function __OriginkitBase_UserCursor(props: Props) {
         size,
     ])
 
-    const mouseX = useMotionValue(-9999)
-    const mouseY = useMotionValue(-9999)
+    // The cursor previously ran through 4 framer-motion springs
+    // (arrowX/Y + labelX/Y + labelRotation + scale) — every mousemove
+    // scheduled a spring step which then triggered a React update and
+    // style write. That competed with the main-thread scroll path for
+    // every frame. We now do a single rAF loop that writes inline
+    // transforms directly to the DOM nodes. Same visual smoothing,
+    // no React work during cursor movement.
+    const arrowRef = useRef<HTMLDivElement | null>(null)
+    const labelRef = useRef<HTMLDivElement | null>(null)
 
-    const arrowX = useSpring(mouseX, arrowSpring)
-    const arrowY = useSpring(mouseY, arrowSpring)
-    const labelX = useSpring(mouseX, labelSpringCfg)
-    const labelY = useSpring(mouseY, labelSpringCfg)
-
-    const scaleMV = useMotionValue(1)
-    useEffect(() => {
-        const controls = animate(scaleMV, pressed ? (pressScale || 0.92) : 1, {
-            type: "spring",
-            stiffness: 500,
-            damping: 28,
-            mass: 0.5,
-        })
-        return () => controls.stop()
-    }, [pressed, pressScale, scaleMV])
-
-    const labelTiltTarget = useMotionValue(0)
-    const labelRotation = useSpring(labelTiltTarget, {
-        stiffness: 200,
-        damping: 24,
-        mass: 0.6,
+    // Refs (not state) for values that change every frame — avoids re-renders.
+    const cursorStateRef = useRef({
+        mouseX: -9999,
+        mouseY: -9999,
+        arrowX: -9999,
+        arrowY: -9999,
+        labelX: -9999,
+        labelY: -9999,
+        scale: 1,
+        labelRot: 0,
     })
+
+    // Refs the mousemove handler reads for the latest pressed state
+    const pressedRef = useRef(false)
+    useEffect(() => { pressedRef.current = pressed }, [pressed])
+    const labelOffsetRef = useRef({ x: 25, y: 12 })
+    useEffect(() => {
+        labelOffsetRef.current = {
+            x: resolvedLabelOffset.x,
+            y: resolvedLabelOffset.y,
+        }
+    }, [resolvedLabelOffset.x, resolvedLabelOffset.y])
+    const ensureRunningRef = useRef<() => void>(() => {})
+
+    useEffect(() => {
+        let rafId = 0
+        let running = false
+
+        const tick = () => {
+            rafId = 0
+            const s = cursorStateRef.current
+
+            // Spring smoothing — explicit per-axis exponential approach.
+            // These factors match the previous stiffness/damping feel.
+            const ARROW_FACTOR = 0.35
+            const LABEL_FACTOR = 0.22
+
+            s.arrowX += (s.mouseX - s.arrowX) * ARROW_FACTOR
+            s.arrowY += (s.mouseY - s.arrowY) * ARROW_FACTOR
+            s.labelX += (s.mouseX - s.labelX) * LABEL_FACTOR
+            s.labelY += (s.mouseY - s.labelY) * LABEL_FACTOR
+
+            const targetScale = pressedRef.current ? (pressScale || 0.92) : 1
+            s.scale += (targetScale - s.scale) * 0.3
+            // Decay tilt toward 0
+            s.labelRot += (0 - s.labelRot) * 0.2
+
+            const ax = s.arrowX
+            const ay = s.arrowY
+            const lx = s.labelX + (labelOffsetRef.current.x || 25)
+            const ly = s.labelY + (labelOffsetRef.current.y || 12)
+
+            if (arrowRef.current) {
+                arrowRef.current.style.transform =
+                    `translate3d(${ax}px, ${ay}px, 0) scale(${s.scale})`
+            }
+            if (labelRef.current) {
+                labelRef.current.style.transform =
+                    `translate3d(${lx}px, ${ly}px, 0) rotate(${s.labelRot}deg) scale(${s.scale})`
+            }
+
+            // Stop the rAF once the cursor has settled.
+            const settled =
+                Math.abs(s.arrowX - s.mouseX) < 0.05 &&
+                Math.abs(s.arrowY - s.mouseY) < 0.05 &&
+                Math.abs(s.scale - targetScale) < 0.002 &&
+                Math.abs(s.labelRot) < 0.05
+
+            if (!settled || pressedRef.current) {
+                rafId = requestAnimationFrame(tick)
+            } else {
+                running = false
+            }
+        }
+
+        const ensureRunning = () => {
+            if (!running) {
+                running = true
+                rafId = requestAnimationFrame(tick)
+            }
+        }
+
+        // Expose a way for the mousemove handler to nudge the loop awake.
+        ensureRunningRef.current = ensureRunning
+
+        return () => {
+            if (rafId) cancelAnimationFrame(rafId)
+            running = false
+        }
+    }, [pressScale])
 
     const lastSampleRef = useRef<{ x: number; y: number; t: number } | null>(null)
 
@@ -220,19 +278,27 @@ function __OriginkitBase_UserCursor(props: Props) {
             }
             lastSampleRef.current = { x, y, t: now }
 
-            mouseX.set(x + resolvedOffset.x)
-            mouseY.set(y + resolvedOffset.y)
+            const s = cursorStateRef.current
+            s.mouseX = x + resolvedOffset.x
+            s.mouseY = y + resolvedOffset.y
 
             const speed = Math.hypot(vx, vy)
             const norm = Math.min(1, speed / 1500)
             const sign = vx === 0 ? 0 : vx > 0 ? 1 : -1
-            labelTiltTarget.set(sign * norm * (labelTiltStrength || 25))
+            s.labelRot = sign * norm * (labelTiltStrength || 25)
+
+            // Wake the rAF smoothing loop if it's idle
+            ensureRunningRef.current()
 
             if (fullScreen) setHovering(true)
         }
 
         const onDown = () => setPressed(true)
-        const onUp = () => setPressed(false)
+        const onUp = () => {
+            setPressed(false)
+            // Press-release needs a final frame to lerp scale back up
+            ensureRunningRef.current()
+        }
 
         if (fullScreen) {
             window.addEventListener("mousemove", onMove)
@@ -248,7 +314,6 @@ function __OriginkitBase_UserCursor(props: Props) {
             el.addEventListener("mouseleave", () => {
                 setHovering(false)
                 lastSampleRef.current = null
-                labelTiltTarget.set(0)
             })
         }
 
@@ -267,7 +332,6 @@ function __OriginkitBase_UserCursor(props: Props) {
                 el.removeEventListener("mouseleave", () => {
                     setHovering(false)
                     lastSampleRef.current = null
-                    labelTiltTarget.set(0)
                 })
             }
             setPressed(false)
@@ -278,18 +342,12 @@ function __OriginkitBase_UserCursor(props: Props) {
         labelTiltStrength,
         resolvedOffset.x,
         resolvedOffset.y,
-        mouseX,
-        mouseY,
-        labelTiltTarget,
     ])
 
     const visible = useMemo(() => {
         if (isTouchDevice) return false
         return hovering
     }, [isTouchDevice, hovering])
-
-    const labelTranslateX = useTransform(labelX, (v) => v + resolvedLabelOffset.x)
-    const labelTranslateY = useTransform(labelY, (v) => v + resolvedLabelOffset.y)
 
     const arrowContent: React.ReactNode = useMemo(() => {
         if (typeof arrow === "function") {
@@ -360,16 +418,13 @@ function __OriginkitBase_UserCursor(props: Props) {
         <div ref={containerRef} className={classNames?.root} style={hostStyle}>
             <div style={layerStyle}>
                 {showLabel && (
-                    <motion.div
+                    <div
+                        ref={labelRef}
                         className={classNames?.label}
                         style={{
                             position: "absolute",
                             top: 0,
                             left: 0,
-                            x: labelTranslateX,
-                            y: labelTranslateY,
-                            rotate: labelRotation,
-                            scale: scaleMV,
                             background: color,
                             borderRadius: 999,
                             padding: `${(size || 29) * 0.18}px ${(size || 29) * 0.36}px`,
@@ -380,21 +435,20 @@ function __OriginkitBase_UserCursor(props: Props) {
                             willChange: "transform, opacity",
                             userSelect: "none",
                             pointerEvents: "none",
+                            transform: 'translate3d(-9999px, -9999px, 0)',
                         }}
                     >
                         {labelContent}
-                    </motion.div>
+                    </div>
                 )}
 
-                <motion.div
+                <div
+                    ref={arrowRef}
                     className={classNames?.cursor}
                     style={{
                         position: "absolute",
                         top: 0,
                         left: 0,
-                        x: arrowX,
-                        y: arrowY,
-                        scale: scaleMV,
                         width: size,
                         height: size,
                         opacity: visible ? 1 : 0,
@@ -402,12 +456,13 @@ function __OriginkitBase_UserCursor(props: Props) {
                         transition: "opacity 140ms ease",
                         willChange: "transform, opacity",
                         pointerEvents: "none",
+                        transform: 'translate3d(-9999px, -9999px, 0)',
                     }}
                 >
                     <div className={classNames?.arrow} style={{ width: size, height: size }}>
                         {arrowContent}
                     </div>
-                </motion.div>
+                </div>
             </div>
         </div>
     )

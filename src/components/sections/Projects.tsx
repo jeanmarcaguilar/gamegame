@@ -1,42 +1,92 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ProjectCard } from '@/components/ProjectCard';
 import { ProjectModal } from '@/components/ProjectModal';
 import { projects } from '@/constants/projects';
 import type { Project } from '@/constants/projects';
 import { fadeUp } from '@/animations/variants';
-import Spline from '@splinetool/react-spline';
+
+// Spline is loaded lazily and only once the section actually enters the
+// viewport. The page was previously mounting a full WebGL context behind
+// the project grid on first paint — combined with the Hero Spline that's
+// two GPU-heavy contexts running at once, which made scroll into the
+// Projects section visibly hitch. Deferring until the section is visible
+// means the page has only one Spline scene during the initial scroll.
+const Spline = lazy(() => import('@splinetool/react-spline'));
+import { lazy, Suspense } from 'react';
 
 export function Projects() {
   const [openProject, setOpenProject] = useState<Project | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [loadSpline, setLoadSpline] = useState(false);
 
   // Take first 4 projects for a 2x2 grid if we want to match the image exactly,
   // or just show all. We'll show all and let them wrap.
   const displayProjects = projects.slice(0, 4);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setLoadSpline(true);
+      return;
+    }
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoadSpline(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section id="projects" className="relative overflow-hidden min-h-screen py-24 sm:py-28 lg:py-36">
-      {/* Spline 3D Background — oversized canvas cropped to hide watermark corner */}
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="relative overflow-hidden min-h-screen py-24 sm:py-28 lg:py-36"
+    >
+      {/* Spline 3D Background — oversized canvas cropped to hide watermark corner.
+          Lazy: the actual <Spline/> component is only mounted once the
+          section scrolls near the viewport (see the IntersectionObserver
+          above). Until then we render a lightweight CSS gradient so the
+          section's vertical space is reserved and there's no layout jump. */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <div
-          className="absolute flex items-center justify-center"
-          style={{
-            top: '-2%',
-            left: '-2%',
-            width: '106%',
-            height: '112%',
-          }}
-        >
-          <Spline
-            scene="https://prod.spline.design/1svVMR5yatbXHB32/scene.splinecode"
+        {loadSpline ? (
+          <Suspense fallback={null}>
+            <div
+              className="absolute flex items-center justify-center"
+              style={{
+                top: '-2%',
+                left: '-2%',
+                width: '106%',
+                height: '112%',
+              }}
+            >
+              <Spline
+                scene="https://prod.spline.design/1svVMR5yatbXHB32/scene.splinecode"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  opacity: 1,
+                  transform: 'scale(1.3)',
+                }}
+              />
+            </div>
+          </Suspense>
+        ) : (
+          <div
+            className="absolute inset-0"
             style={{
-              width: '100%',
-              height: '100%',
-              opacity: 1,
-              transform: 'scale(1.3)',
+              background:
+                'radial-gradient(60rem 40rem at 50% 40%, rgba(255,255,255,0.04), transparent 65%)',
             }}
           />
-        </div>
+        )}
       </div>
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
