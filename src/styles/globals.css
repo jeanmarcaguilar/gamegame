@@ -561,3 +561,37 @@ section[id] {
     animation: none;
   }
 }
+
+/* -----------------------------------------------------------
+   Hide Spline watermark
+----------------------------------------------------------- */
+div[class*="spline"] > div:last-child {
+  display: none !important;
+}
+a[href*="spline.design"] {
+  display: none !important;
+}
+.spline-watermark {
+  display: none !important;
+}
+[class*="watermark"] {
+  display: none !important;
+}
+[class*="logo"] {
+  display: none !important;
+}
+.spline__logo {
+  display: none !important;
+}
+.spline-embed-wrapper > div > div:last-child {
+  display: none !important;
+}
+[data-spline-logo] {
+  display: none !important;
+}
+[class*="spline-logo"] {
+  display: none !important;
+}
+.spline-view > div:last-child {
+  display: none !important;
+}

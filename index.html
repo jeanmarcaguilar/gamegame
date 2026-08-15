@@ -17,6 +17,39 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <title>Jean Marc Aguilar — Full Stack Developer</title>
+    <style>
+      /* Hide Spline watermark immediately */
+      div[class*="spline"] > div:last-child {
+        display: none !important;
+      }
+      a[href*="spline.design"] {
+        display: none !important;
+      }
+      .spline-watermark {
+        display: none !important;
+      }
+      [class*="watermark"] {
+        display: none !important;
+      }
+      [class*="logo"] {
+        display: none !important;
+      }
+      .spline__logo {
+        display: none !important;
+      }
+      .spline-embed-wrapper > div > div:last-child {
+        display: none !important;
+      }
+      [data-spline-logo] {
+        display: none !important;
+      }
+      [class*="spline-logo"] {
+        display: none !important;
+      }
+      .spline-view > div:last-child {
+        display: none !important;
+      }
+    </style>
     <script>
       // Runs synchronously before React mounts to avoid a flash of the
       // wrong theme. Reads saved preference, falls back to OS preference.

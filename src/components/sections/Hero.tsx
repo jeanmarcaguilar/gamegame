@@ -157,7 +157,7 @@ export function Hero() {
           <Spline
             ref={splineRef}
             scene="https://prod.spline.design/si0FoV7XZ1XjbCzK/scene.splinecode"
-            style={{ width: '100%', height: '100%', opacity: 1 }}
+            style={{ width: '100%', height: '100%', opacity: 1, transform: 'scale(1.3)' }}
           />
         </div>
         {/* Hide Spline footer */}
@@ -166,6 +166,21 @@ export function Hero() {
             display: none !important;
           }
           a[href*="spline.design"] {
+            display: none !important;
+          }
+          .spline-watermark {
+            display: none !important;
+          }
+          [class*="watermark"] {
+            display: none !important;
+          }
+          [class*="logo"] {
+            display: none !important;
+          }
+          .spline__logo {
+            display: none !important;
+          }
+          .spline-embed-wrapper > div > div:last-child {
             display: none !important;
           }
         `}</style>

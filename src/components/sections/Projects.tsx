@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ProjectCard } from '@/components/ProjectCard';
 import { ProjectModal } from '@/components/ProjectModal';
@@ -13,7 +13,6 @@ import { fadeUp } from '@/animations/variants';
 // Projects section visibly hitch. Deferring until the section is visible
 // means the page has only one Spline scene during the initial scroll.
 const Spline = lazy(() => import('@splinetool/react-spline'));
-import { lazy, Suspense } from 'react';
 
 export function Projects() {
   const [openProject, setOpenProject] = useState<Project | null>(null);
@@ -76,6 +75,30 @@ export function Projects() {
                   transform: 'scale(1.3)',
                 }}
               />
+              {/* Hide Spline watermark */}
+              <style>{`
+                div[class*="spline"] > div:last-child {
+                  display: none !important;
+                }
+                a[href*="spline.design"] {
+                  display: none !important;
+                }
+                .spline-watermark {
+                  display: none !important;
+                }
+                [class*="watermark"] {
+                  display: none !important;
+                }
+                [class*="logo"] {
+                  display: none !important;
+                }
+                .spline__logo {
+                  display: none !important;
+                }
+                .spline-embed-wrapper > div > div:last-child {
+                  display: none !important;
+                }
+              `}</style>
             </div>
           </Suspense>
         ) : (
